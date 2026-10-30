@@ -1,0 +1,36 @@
+# Flutter / Dart
+.dart_tool/
+.flutter-plugins
+.flutter-plugins-dependencies
+.packages
+build/
+coverage/
+
+# Android
+.gradle/
+local.properties
+*.jks
+*.keystore
+key.properties
+
+# iOS / macOS
+Pods/
+.symlinks/
+DerivedData/
+*.mobileprovision
+*.p12
+
+# IDE / OS
+.idea/
+.vscode/
+*.iml
+.DS_Store
+Thumbs.db
+
+# Secrets and local media
+.env
+.env.*
+!.env.example
+secrets/
+private_test_media/
+
