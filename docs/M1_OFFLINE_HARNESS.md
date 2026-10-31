@@ -172,8 +172,9 @@ Required iOS Mac check:
 5. Repeat selection and a decoder failure to check sessions are released and no
    previous detections are reused.
 
-Until this checklist is recorded, the Swift code is prepared but iOS support is
-not verified.
+GitHub Actions run 41252643668 compiled the Swift code into an iOS simulator app
+with Xcode 16.4. Until the runtime checklist above is recorded, picker/decoder
+behavior and performance on an iPhone are not verified.
 
 - Runtime source-content hashing and binding a source artifact to each evidence
   record are deferred. fixtureId and adapter metadata are declarations, not

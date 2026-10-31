@@ -4,11 +4,11 @@ Last updated: 2026-11-01
 
 ## Current phase
 
-M1 — local-video picker/decoder and detector integration is being implemented on
-`codex/m1-local-video-decoder`; **M1 is not complete**. Android CI and iOS
-Mac/Xcode verification for this slice are pending.
+M1 — local-video picker/decoder and detector integration is validated on
+`codex/m1-local-video-decoder`; **M1 is not complete**. Physical Android/iPhone
+runtime verification and real-video tracking evidence remain pending.
 
-## M1 local-video slice in progress
+## M1 local-video slice
 
 - Added a dependency-free platform channel for local video selection and
   session-scoped decoding. Video remains on device.
@@ -20,9 +20,14 @@ Mac/Xcode verification for this slice are pending.
   behavior. Failures never substitute a synthetic frame.
 - Added a visible `Yerel video analizi` screen that analyzes at most 120 frames
   and reports coarse detection counts only. Tracking and speed remain unavailable.
-- No dependency, model, dataset or network service was added. Android build and
-  runtime checks, Swift compilation, approved real-video fixture evidence and
-  device performance remain unverified at this point.
+- No dependency, model, dataset or network service was added.
+- GitHub Actions run 41252643668 on commit `a5c5c8a` passed 40 Flutter tests,
+  static analysis, the 30-package plus one-model license gate, and Android APK
+  creation. Its macOS job used Xcode 16.4 and produced an iOS simulator
+  `Runner.app`; this proves Swift compilation, not physical-device behavior.
+- Picker interaction, codec output correctness across device vendors, portrait/
+  landscape orientation, inference latency, memory and thermal behavior still
+  require approved videos on named physical Android and iPhone devices.
 
 ## M1 licensed detector slice
 
