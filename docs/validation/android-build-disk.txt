@@ -1,0 +1,46 @@
+Running Gradle task 'assembleDebug'...                          
+
+FAILURE: Build completed with 3 failures.
+
+1: Task failed with an exception.
+-----------
+* What went wrong:
+Execution failed for task ':app:writeDebugAppMetadata'.
+> Failed to create parent directory '/workspace/hiz/build/app/intermediates/app_metadata' when creating directory '/workspace/hiz/build/app/intermediates/app_metadata/debug/writeDebugAppMetadata'
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+==============================================================================
+
+2: Task failed with an exception.
+-----------
+* What went wrong:
+Execution failed for task ':app:mergeDebugNativeLibs'.
+> A failure occurred while executing com.android.build.gradle.internal.tasks.MergeNativeLibsTask$MergeNativeLibsTaskWorkAction
+   > No space left on device
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+==============================================================================
+
+3: Task failed with an exception.
+-----------
+* What went wrong:
+java.io.IOException: No space left on device
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+==============================================================================
+
+BUILD FAILED in 3m 8s
+Running Gradle task 'assembleDebug'...                            188.7s
+Gradle task assembleDebug failed with exit code 1

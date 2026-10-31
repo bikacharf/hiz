@@ -1,0 +1,22 @@
+Running Gradle task 'assembleDebug'...                          
+Warning: An error occurred while preparing SDK package NDK (Side by side) 28.2.13676358: /workspace/toolchains/android-sdk/.temp/PackageOperation01/unzip/android-ndk-r28c/build: No space left on device.
+
+FAILURE: Build failed with an exception.
+
+* Where:
+Build file '/workspace/hiz/android/build.gradle.kts' line: 19
+
+* What went wrong:
+A problem occurred configuring project ':app'.
+> Process 'command '/workspace/toolchains/android-sdk/cmdline-tools/latest/bin/sdkmanager'' finished with non-zero exit value 1
+
+* Try:
+> Run with --stacktrace option to get the stack trace.
+> Run with --info or --debug option to get more log output.
+> Run with --scan to get full insights from a Build Scan (powered by Develocity).
+> Get more help at https://help.gradle.org.
+
+BUILD FAILED in 7m 39s
+
+Running Gradle task 'assembleDebug'...                            460.1s
+Gradle task assembleDebug failed with exit code 1

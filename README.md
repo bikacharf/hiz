@@ -1,8 +1,8 @@
 # Hız Ölçer
 
-Hız Ölçer, telefon kamerasındaki insan, bisiklet, araç ve seçili top türlerini cihaz üzerinde algılayıp takip ederek tahmini hız üreten iOS ve Android uygulamasıdır.
+Hız Ölçer, telefon kamerasındaki insan, bisiklet, araç ve seçili top türlerini cihaz üzerinde algılayıp takip ederek tahmini hız sunmayı amaçlayan bir iOS ve Android projesidir.
 
-Proje şu anda teknik fizibilite aşamasındadır. Kullanıcıdan mesafe veya kalibrasyon girişi alınmaz. Gerçek ölçek, nesne türüne ve görüntü geometrisine göre otomatik tahmin edilir. Bu tahmin doğrulanmadan ölçüm kesin veya resmî hız ölçümü olarak sunulmaz.
+Proje şu anda teknik fizibilite aşamasındadır. Kullanıcıdan mesafe veya kalibrasyon girişi alınmaz. Gerçek ölçeğin nesne türüne ve görüntü geometrisine göre otomatik tahmin edilmesi araştırılacaktır. Bu tahmin doğrulanmadan ölçüm kesin veya resmî hız ölçümü olarak sunulmaz.
 
 ## Başlangıç belgeleri
 
@@ -21,3 +21,10 @@ Proje şu anda teknik fizibilite aşamasındadır. Kullanıcıdan mesafe veya ka
 - iOS çalışması Mac ve gerçek iPhone üzerinde doğrulanmadan tamamlanmış sayılmaz.
 - Ticari uygulamayla uyumsuz lisanslı kod veya model eklenmez.
 
+
+## M0 geliştirme kabuğu
+
+Mevcut uygulama yalnızca açıkça etiketlenmiş koyu/nane arayüz prototipidir.
+Kamera, algılama, takip, otomatik ölçek ve hız ölçümü henüz uygulanmamıştır.
+Kurulum, sabit sürümler, doğrulama komutları ve zorunlu Mac/Xcode kontrolleri:
+[Development guide](docs/DEVELOPMENT.md).

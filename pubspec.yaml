@@ -1,0 +1,15 @@
+name: hiz_olcer
+description: Hız Ölçer M0 development shell; no measurement implementation.
+publish_to: none
+version: 0.1.0+1
+environment:
+  sdk: '>=3.13.7 <4.0.0'
+dependencies:
+  flutter:
+    sdk: flutter
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: 6.0.0
+flutter:
+  uses-material-design: true
