@@ -11,8 +11,8 @@ void require(bool condition, String message) {
 class Target {
   Target(this.kind, {this.ballType}) {
     require(
-      (kind == TargetClass.ball) == (ballType != null),
-      'Only balls require a subtype',
+      kind == TargetClass.ball || ballType == null,
+      'Only balls may carry a subtype',
     );
   }
   final TargetClass kind;
@@ -216,7 +216,9 @@ class MeasurementCandidate {
             metersPerSecond! >= 0 &&
             scale != null &&
             quality.band == QualityBand.sufficient &&
-            track.observations.length >= 2,
+            track.observations.length >= 2 &&
+            (track.observations.first.target.kind != TargetClass.ball ||
+                track.observations.first.target.ballType != null),
         'Insufficient measurement evidence',
       );
     }

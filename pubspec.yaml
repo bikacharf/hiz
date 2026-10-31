@@ -7,6 +7,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
+  tflite_flutter: 0.12.1
 dev_dependencies:
   flutter_test:
     sdk: flutter
@@ -15,3 +16,4 @@ flutter:
   uses-material-design: true
   assets:
     - assets/fixtures/occlusion.json
+    - assets/models/efficientdet_lite0_metadata_v1.tflite

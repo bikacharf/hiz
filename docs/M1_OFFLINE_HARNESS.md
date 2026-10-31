@@ -5,14 +5,19 @@ annotations; it does not decode video, inspect pixels, run MediaPipe, detect an
 object, estimate scale, or produce speed. Real-world tracking is unvalidated.
 No model weights, runtime, decoder, dataset, plugin or dependency was added.
 
-## License decision
+## License decision — updated detector slice
 
-The official google-ai-edge/mediapipe runtime repository is Apache-2.0:
-https://github.com/google-ai-edge/mediapipe/blob/master/LICENSE
-That runtime license does not establish redistribution rights for separately
-published EfficientDet/MediaPipe weights. No weights have been downloaded or
-accepted. A specific model artifact needs a verifiable accompanying license,
-commercial redistribution review and provenance before integration.
+The synthetic harness remains model independent. A later, separate adapter now
+bundles the TensorFlow EfficientDet-Lite0 metadata variation 1 artifact and uses
+tflite_flutter 0.12.1. The artifact byte size, SHA-256, exact download URL,
+Apache-2.0 evidence, embedded COCO label map, tensor contract and limitations are
+recorded in `docs/models/inventory.json` and checked offline. Runtime and model
+licensing are tracked separately in `THIRD_PARTY_NOTICES.md`.
+
+This closes the prototype's named-model provenance gate, not the full M1 gate.
+No approved local video decoder or real-video fixture is present, and neither
+Android nor iOS device inference has been validated. Commercial release still
+requires a fresh generated-binary notice audit and legal review.
 The fixture and expected output in this change are repository-authored synthetic
 numbers and annotations, with no personal images, recordings or external dataset.
 See THIRD_PARTY_NOTICES.md. Do not substitute this fixture for failed inference.
@@ -142,8 +147,9 @@ identity and fail-closed assertions, not proof of detector or speed performance.
   validation-file SHA-256 values are build evidence only and do not close this
   harness provenance/integrity gap.
 
-- Accept a specific model's verifiable commercial redistribution license and
-  artifact provenance, then review the runtime/model as separate components.
+- Run the bundled model on physical Android and iOS devices and retain an
+  approved non-personal smoke-test artifact; desktop unit tests do not establish
+  mobile runtime compatibility or detection quality.
 - Implement local video import/decoder and capture metadata adapter. Preserve
   timestamps, rotation/image transforms, lens/zoom provenance and frame lifetime.
 - Connect a licensed real detector to observations and validate tracking on

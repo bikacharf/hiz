@@ -31,4 +31,18 @@ for item in reviewed:
     assert (
         hashlib.sha256(canonical_notice).hexdigest() == item['notice_sha256']
     ), item
-print(f'PASS: {len(reviewed)} locked packages have reviewed license records')
+models = json.loads((root / 'docs/models/inventory.json').read_text())
+for item in models:
+    assert item['license'] in {'BSD-3-Clause', 'MIT', 'Apache-2.0'}, item
+    assert item['source'].startswith('https://'), item
+    artifact = root / item['artifact']
+    assert artifact.is_file() and artifact.stat().st_size == item['bytes'], item
+    assert hashlib.sha256(artifact.read_bytes()).hexdigest() == item['sha256'], item
+    notice = (root / item['notice']).read_bytes().replace(b'\r\n', b'\n')
+    assert notice.strip(), item
+    assert hashlib.sha256(notice).hexdigest() == item['notice_sha256'], item
+
+print(
+    f'PASS: {len(reviewed)} locked packages and {len(models)} model artifact '
+    'have reviewed license records'
+)

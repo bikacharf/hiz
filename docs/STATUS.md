@@ -1,12 +1,35 @@
 # Project status
 
-Last updated: 2026-10-31
+Last updated: 2026-11-01
 
 ## Current phase
 
-M1 — model-independent offline harness slice delivered; **M1 is not complete**.
-Base: main ba5f071. Branch: codex/m1-offline-harness.
+M1 — licensed model detector adapter added after the model-independent harness;
+**M1 is not complete**. Base: main 242e828. Branch:
+codex/m1-licensed-detector.
 iOS still requires Mac/Xcode verification.
+
+## M1 licensed detector slice
+
+- Bundled TensorFlow EfficientDet-Lite0 metadata variation 1 from the canonical
+  Kaggle TensorFlow download: 4,563,519 bytes, SHA-256
+  `2e04c53bfeac0ac2a30c057c7e2a777594ce39baaac35a92f74fb1e8c4fc4e0b`.
+- Added tflite_flutter 0.12.1 and its exact locked permissive dependencies.
+  The offline license gate now checks 30 packages plus the model binary, size,
+  hash and license notice.
+- Added a strict RGB888/source-PTS adapter, deterministic aspect-preserving
+  letterbox transform, source-coordinate box conversion, tensor-contract checks,
+  score filtering and coarse COCO mapping for person/bicycle/vehicle/sports ball.
+- Coarse sports-ball output never invents football/basketball/tennis subtype.
+  The domain allows an untyped coarse ball detection but blocks numeric ball
+  speed until a subtype exists.
+- The real LiteRT wrapper is isolated from pure unit tests and is not connected
+  to the prototype UI. No failed inference produces mock detections.
+- Local `python tool/check_licenses.py`: PASS, 30 locked packages and one model.
+  Flutter format/analyze/test/Android build remain pending because this Windows
+  machine has no installed Flutter SDK and the saved Cloud host became
+  unavailable while task creation was attempted. Do not treat this slice as
+  merged or validated until those gates pass.
 
 ## M1 first slice and evidence
 
@@ -48,11 +71,10 @@ network permission; session-only tool/cache/CA settings follow DEVELOPMENT.md.
 
 ## Remaining M1 blockers and next action
 
-1. A specific model artifact must have a verifiable accompanying license and
-   commercial redistribution provenance. MediaPipe runtime Apache-2.0 does not
-   establish EfficientDet/MediaPipe weights licensing. No weights downloaded.
-2. Real local-video import/decoder, timestamp/geometry adapter and licensed
-   detector integration are absent. Validate these on approved video fixtures
+1. Run the bundled model/runtime on physical Android and iOS devices and audit
+   the notices inside generated release binaries before distribution.
+2. Real local-video import/decoder and timestamp/geometry adapter are absent.
+   Validate them with the detector on approved video fixtures
    before claiming real detection or tracking behavior.
 3. Source-content hashing and evidence-to-source cryptographic binding are
    deferred. No crypto dependency was added. Declared fixture IDs/metadata and

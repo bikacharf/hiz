@@ -54,6 +54,15 @@
     "notice_sha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd"
   },
   {
+    "name": "ffi",
+    "version": "2.2.0",
+    "license": "BSD-3-Clause",
+    "source": "https://github.com/dart-lang/native/tree/main/pkgs/ffi",
+    "notice": "docs/licenses/characters.txt",
+    "scope": "transitive",
+    "notice_sha256": "0371d1da6a57fb791db29d29b95333429205f51f3cb2eb3a0c12d91838a38744"
+  },
+  {
     "name": "flutter",
     "version": "0.0.0",
     "license": "BSD-3-Clause",
@@ -153,6 +162,24 @@
     "notice_sha256": "3c32b53167c7dae9190c38dab5dd9fe1789c53623ebc7d1babcb29914c5b3f16"
   },
   {
+    "name": "plugin_platform_interface",
+    "version": "2.1.8",
+    "license": "BSD-3-Clause",
+    "source": "https://github.com/flutter/packages/tree/main/packages/plugin_platform_interface",
+    "notice": "docs/licenses/flutter_lints.txt",
+    "scope": "transitive",
+    "notice_sha256": "89519eca6f7b9529b35bdddd623a58c3af06a88c458dbd6531ddb4675acf75a9"
+  },
+  {
+    "name": "quiver",
+    "version": "3.2.2",
+    "license": "Apache-2.0",
+    "source": "https://github.com/google/quiver-dart",
+    "notice": "docs/licenses/clock.txt",
+    "scope": "transitive",
+    "notice_sha256": "58d1e17ffe5109a7ae296caafcadfdbe6a7d176f0bc4ab01e12a689b0499d8bd"
+  },
+  {
     "name": "sky_engine",
     "version": "0.0.0",
     "license": "BSD-3-Clause + bundled engine notices",
@@ -214,6 +241,15 @@
     "notice": "docs/licenses/test_api.txt",
     "scope": "transitive",
     "notice_sha256": "ff1b9f0df9036c04be424b1e3ce12789bea880ad5ffc3a48e069ae2d40a087a4"
+  },
+  {
+    "name": "tflite_flutter",
+    "version": "0.12.1",
+    "license": "Apache-2.0",
+    "source": "https://github.com/tensorflow/flutter-tflite",
+    "notice": "docs/licenses/tflite_flutter.txt",
+    "scope": "direct main",
+    "notice_sha256": "cfc7749b96f63bd31c3c42b5c471bf756814053e847c10f3eb003417bc523d30"
   },
   {
     "name": "vector_math",
