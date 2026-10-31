@@ -52,3 +52,14 @@ Each candidate result should include at least:
 - iOS camera behavior, performance, signing, and native compilation require a Mac with Xcode.
 - Device performance and thermal behavior require physical phones.
 
+
+## M0 contract mapping
+
+`lib/domain/measurement.dart` contains independent CaptureSource, Detector,
+Tracker, CameraMotionEstimator, ScaleEstimator, SpeedEstimator, QualityEvaluator
+and EvidenceLogger contracts, with typed immutable observations/evidence.
+No contract has a production implementation in M0. Capture timestamps use
+monotonic microseconds supplied by future native capture metadata. A lens/zoom
+change requires a fresh track. Unknown quality gates cannot pass. Scale priors,
+quality thresholds and speed algorithms are deliberately unspecified pending
+milestone research. The UI never creates measurement candidates.

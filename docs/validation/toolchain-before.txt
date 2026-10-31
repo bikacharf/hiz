@@ -1,0 +1,12 @@
+2026-10-31, Linux cloud, before project generation
+flutter: not found
+dart: not found
+java: /usr/bin/java
+openjdk version "21.0.12.1" 2026-08-18
+OpenJDK Runtime Environment (build 21.0.12.1+1-1-deb13u1-Debian)
+OpenJDK 64-Bit Server VM (build 21.0.12.1+1-1-deb13u1-Debian, mixed mode, sharing)
+gradle: not found
+sdkmanager: not found
+Android SDK: not found in configured path or standard /opt and /usr/lib paths
+swift: not found
+xcodebuild: not found (Linux)

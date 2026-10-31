@@ -1,0 +1,210 @@
+[
+  {
+    "name": "async",
+    "version": "2.13.1",
+    "license": "BSD-3-Clause",
+    "source": "https://github.com/dart-lang/core/tree/main/pkgs/async",
+    "notice": "docs/licenses/async.txt",
+    "scope": "transitive"
+  },
+  {
+    "name": "boolean_selector",
+    "version": "2.1.2",
+    "license": "BSD-3-Clause",
+    "source": "https://github.com/dart-lang/tools/tree/main/pkgs/boolean_selector",
+    "notice": "docs/licenses/boolean_selector.txt",
+    "scope": "transitive"
+  },
+  {
+    "name": "characters",
+    "version": "1.4.1",
+    "license": "BSD-3-Clause",
+    "source": "https://github.com/dart-lang/core/tree/main/pkgs/characters",
+    "notice": "docs/licenses/characters.txt",
+    "scope": "transitive"
+  },
+  {
+    "name": "clock",
+    "version": "1.1.3",
+    "license": "Apache-2.0",
+    "source": "https://github.com/dart-lang/tools/tree/main/pkgs/clock",
+    "notice": "docs/licenses/clock.txt",
+    "scope": "transitive"
+  },
+  {
+    "name": "collection",
+    "version": "1.19.1",
+    "license": "BSD-3-Clause",
+    "source": "https://github.com/dart-lang/core/tree/main/pkgs/collection",
+    "notice": "docs/licenses/collection.txt",
+    "scope": "transitive"
+  },
+  {
+    "name": "fake_async",
+    "version": "1.3.3",
+    "license": "Apache-2.0",
+    "source": "https://github.com/dart-lang/test/tree/master/pkgs/fake_async",
+    "notice": "docs/licenses/fake_async.txt",
+    "scope": "transitive"
+  },
+  {
+    "name": "flutter",
+    "version": "0.0.0",
+    "license": "BSD-3-Clause",
+    "source": "https://flutter.dev",
+    "notice": "docs/licenses/flutter.txt",
+    "scope": "direct main"
+  },
+  {
+    "name": "flutter_lints",
+    "version": "6.0.0",
+    "license": "BSD-3-Clause",
+    "source": "https://github.com/flutter/packages/tree/main/packages/flutter_lints",
+    "notice": "docs/licenses/flutter_lints.txt",
+    "scope": "direct dev"
+  },
+  {
+    "name": "flutter_test",
+    "version": "0.0.0",
+    "license": "BSD-3-Clause",
+    "source": "https://pub.dev/packages/flutter_test",
+    "notice": "docs/licenses/flutter_test.txt",
+    "scope": "direct dev"
+  },
+  {
+    "name": "leak_tracker",
+    "version": "11.0.2",
+    "license": "BSD-3-Clause",
+    "source": "https://github.com/dart-lang/leak_tracker/tree/main/pkgs/leak_tracker",
+    "notice": "docs/licenses/leak_tracker.txt",
+    "scope": "transitive"
+  },
+  {
+    "name": "leak_tracker_flutter_testing",
+    "version": "3.0.10",
+    "license": "BSD-3-Clause",
+    "source": "https://github.com/dart-lang/leak_tracker/tree/main/pkgs/leak_tracker_flutter_testing",
+    "notice": "docs/licenses/leak_tracker_flutter_testing.txt",
+    "scope": "transitive"
+  },
+  {
+    "name": "leak_tracker_testing",
+    "version": "3.0.2",
+    "license": "BSD-3-Clause",
+    "source": "https://github.com/dart-lang/leak_tracker/tree/main/pkgs/leak_tracker_testing",
+    "notice": "docs/licenses/leak_tracker_testing.txt",
+    "scope": "transitive"
+  },
+  {
+    "name": "lints",
+    "version": "6.1.0",
+    "license": "BSD-3-Clause",
+    "source": "https://github.com/dart-lang/core/tree/main/pkgs/lints",
+    "notice": "docs/licenses/lints.txt",
+    "scope": "transitive"
+  },
+  {
+    "name": "matcher",
+    "version": "0.12.20",
+    "license": "BSD-3-Clause",
+    "source": "https://github.com/dart-lang/test/tree/master/pkgs/matcher",
+    "notice": "docs/licenses/matcher.txt",
+    "scope": "transitive"
+  },
+  {
+    "name": "material_color_utilities",
+    "version": "0.13.0",
+    "license": "Apache-2.0",
+    "source": "https://github.com/material-foundation/material-color-utilities/tree/main/dart",
+    "notice": "docs/licenses/material_color_utilities.txt",
+    "scope": "transitive"
+  },
+  {
+    "name": "meta",
+    "version": "1.19.0",
+    "license": "BSD-3-Clause",
+    "source": "https://github.com/dart-lang/sdk/tree/main/pkg/meta",
+    "notice": "docs/licenses/meta.txt",
+    "scope": "transitive"
+  },
+  {
+    "name": "path",
+    "version": "1.9.1",
+    "license": "BSD-3-Clause",
+    "source": "https://github.com/dart-lang/core/tree/main/pkgs/path",
+    "notice": "docs/licenses/path.txt",
+    "scope": "transitive"
+  },
+  {
+    "name": "sky_engine",
+    "version": "0.0.0",
+    "license": "BSD-3-Clause + bundled engine notices",
+    "source": "https://github.com/flutter/flutter/tree/c197ca5199e9ee5661e865596c9c07294dfab51c/engine",
+    "notice": "docs/licenses/sky_engine.txt",
+    "scope": "transitive"
+  },
+  {
+    "name": "source_span",
+    "version": "1.10.2",
+    "license": "BSD-3-Clause",
+    "source": "https://github.com/dart-lang/tools/tree/main/pkgs/source_span",
+    "notice": "docs/licenses/source_span.txt",
+    "scope": "transitive"
+  },
+  {
+    "name": "stack_trace",
+    "version": "1.12.2",
+    "license": "BSD-3-Clause",
+    "source": "https://github.com/dart-lang/tools/tree/main/pkgs/stack_trace",
+    "notice": "docs/licenses/stack_trace.txt",
+    "scope": "transitive"
+  },
+  {
+    "name": "stream_channel",
+    "version": "2.1.4",
+    "license": "BSD-3-Clause",
+    "source": "https://github.com/dart-lang/tools/tree/main/pkgs/stream_channel",
+    "notice": "docs/licenses/stream_channel.txt",
+    "scope": "transitive"
+  },
+  {
+    "name": "string_scanner",
+    "version": "1.4.1",
+    "license": "BSD-3-Clause",
+    "source": "https://github.com/dart-lang/tools/tree/main/pkgs/string_scanner",
+    "notice": "docs/licenses/string_scanner.txt",
+    "scope": "transitive"
+  },
+  {
+    "name": "term_glyph",
+    "version": "1.2.2",
+    "license": "BSD-3-Clause",
+    "source": "https://github.com/dart-lang/tools/tree/main/pkgs/term_glyph",
+    "notice": "docs/licenses/term_glyph.txt",
+    "scope": "transitive"
+  },
+  {
+    "name": "test_api",
+    "version": "0.7.12",
+    "license": "BSD-3-Clause",
+    "source": "https://github.com/dart-lang/test/tree/master/pkgs/test_api",
+    "notice": "docs/licenses/test_api.txt",
+    "scope": "transitive"
+  },
+  {
+    "name": "vector_math",
+    "version": "2.4.4",
+    "license": "BSD-3-Clause",
+    "source": "https://github.com/flutter/core-packages/tree/main/packages/vector_math",
+    "notice": "docs/licenses/vector_math.txt",
+    "scope": "transitive"
+  },
+  {
+    "name": "vm_service",
+    "version": "15.4.0",
+    "license": "BSD-3-Clause",
+    "source": "https://github.com/dart-lang/sdk/tree/main/pkg/vm_service",
+    "notice": "docs/licenses/vm_service.txt",
+    "scope": "transitive"
+  }
+]

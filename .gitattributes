@@ -1,0 +1,4 @@
+# Preserve upstream license text verbatim, including original whitespace.
+docs/licenses/*.txt -whitespace
+# Raw verification outputs also retain upstream progress-line spacing.
+docs/validation/*.txt -whitespace

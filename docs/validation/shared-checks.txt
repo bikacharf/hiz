@@ -1,0 +1,29 @@
+2026-10-31 Linux, Flutter 3.47.9 / Dart 3.13.7 / Java 21.0.12.1
+SDK archive sha256sum -c: OK
+flutter pub get: PASS, 26 dependencies resolved, pubspec.lock committed
+
+dart format --output=none --set-exit-if-changed lib test
+Formatted 4 files (0 changed) in 0.01 seconds.
+Exit 0
+
+flutter analyze --no-pub
+No issues found! (ran in 7.4s)
+Exit 0
+
+flutter test --no-pub
+8 tests passed (7 domain tests, 1 widget navigation test)
+Exit 0
+
+python3 tool/check_licenses.py
+PASS: 26 locked packages have reviewed license records
+Exit 0
+
+Initial restricted-session attempts found read-only ~/.config/flutter and
+~/.dartServer; setting XDG_CONFIG_HOME and ANALYZER_STATE_LOCATION_OVERRIDE fixed
+these. Tests require explicit network permission for loopback sockets. The
+initial test attempt without this permission failed before loading test code;
+the permitted run above passed all tests.
+
+Final contract refinement (opaque native frame handle and typed camera motion):
+flutter analyze --no-pub: PASS, no issues (7.4s)
+flutter test --no-pub: PASS, all 8 tests
