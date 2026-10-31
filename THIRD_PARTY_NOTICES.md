@@ -91,3 +91,15 @@ GPL-2.0-only WITH Classpath-exception-2.0, with bundled component notices retain
 in the installed toolchain. Build-only, not committed or bundled in the app.
 This replaces the environment's compiler-less Java runtime for Android builds;
 commercial proprietary compilation is permitted by the toolchain terms.
+
+## M1 model-independent slice
+
+No new dependency, copied algorithm, model weights or external dataset is added.
+`assets/fixtures/occlusion.json` and `test/fixtures/occlusion.expected.jsonl` are
+original repository-authored synthetic annotations/evidence; no third-party asset
+license or personal recording is involved. The IoU arithmetic and harness are
+original implementation, not copied from a detector/tracker library.
+MediaPipe runtime source (https://github.com/google-ai-edge/mediapipe) is identified
+as Apache-2.0 but is **not installed or bundled**. This does not license separate
+EfficientDet/MediaPipe weights. Model acceptance is blocked pending a verifiable
+license accompanying a specific artifact and commercial redistribution review.

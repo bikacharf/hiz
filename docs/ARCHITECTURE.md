@@ -67,3 +67,13 @@ milestone research. The UI never creates measurement candidates.
 `lib/domain/contracts.dart` is the public export for the canonical measurement
 contracts. There is one quality gate vocabulary; M0 supplies no empirical size
 or duration thresholds. Original dependency notice hashes are checked offline.
+
+## M1 synthetic observation boundary
+
+`lib/offline/harness.dart` accepts only labeled synthetic detection fixtures.
+It reuses CaptureMetadata, NormalizedBox and TargetClass; it does not implement
+Detector or native capture. OfflineHarness has a local, fresh-per-run single-target
+state machine with conservative spatial association and explicit gap/ambiguity/
+loss/optics/class-change outcomes. JSON Lines preserve original per-frame inputs
+and provenance; they never contain a speed estimate. See M1_OFFLINE_HARNESS.md
+for schema, deterministic selection policy and unvalidated association limits.

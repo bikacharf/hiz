@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import 'offline/harness_page.dart';
+
 void main() => runApp(const HizApp());
 
 class HizApp extends StatelessWidget {
@@ -13,6 +15,7 @@ class HizApp extends StatelessWidget {
     ),
     initialRoute: '/',
     routes: {
+      '/offline': (_) => const HarnessPage(),
       '/': (_) => const ShellPage(title: 'Hız Ölçer'),
       '/camera': (_) => const ShellPage(title: 'Kamera'),
       '/history': (_) => const ShellPage(title: 'Geçmiş'),
@@ -30,7 +33,7 @@ class ShellPage extends StatelessWidget {
     body: ListView(
       padding: const EdgeInsets.all(24),
       children: [
-        const Text('M0 • İşlevsiz arayüz prototipi'),
+        const Text('M1 • Model bekleyen offline harness prototipi'),
         const SizedBox(height: 16),
         const Text(
           'Kamera, algılama, takip ve hız ölçümü henüz uygulanmadı. Sayısal hız gösterilmez.',
@@ -41,6 +44,7 @@ class ShellPage extends StatelessWidget {
         const Text('Nesnenin tamamı ekranda görünsün'),
         const Text('Güvenli mesafeden ölç, yola girme.'),
         for (final entry in const {
+          '/offline': 'Çevrimdışı test düzeneği',
           '/camera': 'Kamera',
           '/history': 'Geçmiş',
           '/profile': 'Profil',

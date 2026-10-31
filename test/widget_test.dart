@@ -3,11 +3,30 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:hiz_olcer/main.dart';
 
 void main() {
+  testWidgets(
+    'offline screen labels synthetic input and runs evidence export',
+    (tester) async {
+      await tester.pumpWidget(const HizApp());
+      await tester.tap(find.text('Çevrimdışı test düzeneği'));
+      await tester.pumpAndSettle();
+      expect(find.textContaining('Model bekleniyor'), findsOneWidget);
+      await tester.tap(find.text('Sentetik test senaryosunu çalıştır'));
+      await tester.pumpAndSettle();
+      expect(find.text('Sentetik kare kanıtı • JSON Lines'), findsOneWidget);
+      expect(
+        find.textContaining('authored-occlusion-v1:track-2'),
+        findsOneWidget,
+      );
+    },
+  );
   testWidgets('prototype routes disclose unavailable functionality', (
     tester,
   ) async {
     await tester.pumpWidget(const HizApp());
-    expect(find.text('M0 • İşlevsiz arayüz prototipi'), findsOneWidget);
+    expect(
+      find.text('M1 • Model bekleyen offline harness prototipi'),
+      findsOneWidget,
+    );
     for (final label in ['Kamera', 'Geçmiş', 'Profil']) {
       await tester.tap(find.widgetWithText(TextButton, label).first);
       await tester.pumpAndSettle();
