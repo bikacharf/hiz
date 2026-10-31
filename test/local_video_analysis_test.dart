@@ -89,9 +89,9 @@ class _FakeSession implements LocalVideoSession {
 }
 
 class _FakeRuntime implements EfficientDetRuntime {
-  _FakeRuntime(this.outputs);
+  _FakeRuntime(this.rawOutputs);
 
-  final List<EfficientDetRawOutput> outputs;
+  final List<EfficientDetRawOutput> rawOutputs;
   var index = 0;
   var closed = false;
 
@@ -124,7 +124,7 @@ class _FakeRuntime implements EfficientDetRuntime {
 
   @override
   Future<EfficientDetRawOutput> run(Uint8List inputRgb) async {
-    return outputs[index++];
+    return rawOutputs[index++];
   }
 
   @override
