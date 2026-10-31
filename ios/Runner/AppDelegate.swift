@@ -14,9 +14,9 @@ import UniformTypeIdentifiers
 
   func didInitializeImplicitFlutterEngine(_ engineBridge: FlutterImplicitEngineBridge) {
     GeneratedPluginRegistrant.register(with: engineBridge.pluginRegistry)
-    LocalVideoPlugin.register(
-      with: engineBridge.pluginRegistry.registrar(forPlugin: "LocalVideoPlugin")
-    )
+    if let registrar = engineBridge.pluginRegistry.registrar(forPlugin: "LocalVideoPlugin") {
+      LocalVideoPlugin.register(with: registrar)
+    }
   }
 }
 
