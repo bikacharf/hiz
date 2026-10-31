@@ -26,7 +26,7 @@ iOS explicitly requires Mac/Xcode verification.
 - Dark/mint Home, Camera, History and Profile route shell. Every page discloses
   nonfunctional prototype status. No camera, detection, tracking, scale or speed
   implementation; no numeric speed or simulated production data.
-- Eight tests, CI gate sequence, Linux setup and verification helpers, complete
+- Eleven tests, CI gate sequence, Linux setup and verification helpers, complete
   locked Dart dependency inventory and copied original license notices.
 - Existing secret/private media ignore rules retained. No models, datasets,
   backend, analytics, billing, upload, or new restrictive application dependency.
@@ -40,11 +40,11 @@ See `docs/validation/toolchain-before.txt`, `shared-checks.txt`,
 |---|---|
 | Flutter SDK SHA-256 verification | PASS, official stable archive |
 | flutter pub get --enforce-lockfile | PASS, 26 locked Dart packages |
-| dart format --output=none --set-exit-if-changed lib test | PASS, 4 files unchanged |
+| dart format --output=none --set-exit-if-changed lib test | PASS, 6 files unchanged |
 | flutter analyze --no-pub | PASS, no issues |
-| flutter test --no-pub | PASS, 8 tests |
+| flutter test --no-pub | PASS, 11 tests |
 | python3 tool/check_licenses.py | PASS, all 26 packages inventoried |
-| flutter build apk --debug --no-pub | PASS, app-debug.apk produced in 46.4 seconds |
+| flutter build apk --debug --no-pub | PASS, app-debug.apk produced in 4.1 seconds |
 | bash -n tool/setup_linux.sh tool/verify.sh | PASS (syntax only) |
 | git diff --cached --check | PASS, upstream license whitespace preserved |
 
@@ -75,7 +75,7 @@ repeatable evidence, explicit unsupported cases, and no numeric speed output.
 
 ## Android build evidence and resolved environment blockers
 
-Final command: `flutter build apk --debug --no-pub`, exit 0, 46.4 seconds.
+Final command: `flutter build apk --debug --no-pub`, exit 0, 4.1 seconds.
 Output: `build/app/outputs/flutter-apk/app-debug.apk` (generated/ignored).
 Full successful output: `docs/validation/android-build-final.txt`.
 The app has not been launched on a physical phone.
@@ -96,3 +96,9 @@ The app has not been launched on a physical phone.
   ANDROID_HOME, ANDROID_USER_HOME and GRADLE_USER_HOME outside the repository.
   All remote network command invocations requested the explicit additional
   network permission. No environment workaround is a portable app dependency.
+
+The final merged branch was revalidated: format (6 files), analysis (no issues,
+6.6 seconds), 11 tests, 26 package license/version/notice-hash checks, and Android
+debug build (4.1 seconds, cached toolchain). The existing remote M0 commit remains
+in history. contracts.dart exports the single canonical measurement model; no
+duplicate provisional quality-threshold implementation remains.

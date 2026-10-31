@@ -27,3 +27,10 @@ the permitted run above passed all tests.
 Final contract refinement (opaque native frame handle and typed camera motion):
 flutter analyze --no-pub: PASS, no issues (7.4s)
 flutter test --no-pub: PASS, all 8 tests
+
+Final merged branch:
+dart format --output=none --set-exit-if-changed lib test: PASS, 6 files unchanged
+flutter analyze --no-pub: PASS, no issues (6.6s)
+flutter test --no-pub: PASS, all 11 tests
+python3 tool/check_licenses.py: PASS, 26 version and license notice hash records
+flutter build apk --debug --no-pub: PASS, 4.1 seconds; APK produced

@@ -1,4 +1,5 @@
 """Offline guard: every locked Dart package must have reviewed license evidence."""
+import hashlib
 import json
 import re
 from pathlib import Path
@@ -21,5 +22,7 @@ for item in reviewed:
         item['name'] == 'sky_engine' and item['license'] ==
         'BSD-3-Clause + bundled engine notices'), item
     assert item['source'].startswith('https://'), item
-    assert (root / item['notice']).read_text().strip(), item
+    notice = (root / item['notice']).read_bytes()
+    assert notice.strip(), item
+    assert hashlib.sha256(notice).hexdigest() == item['notice_sha256'], item
 print(f'PASS: {len(reviewed)} locked packages have reviewed license records')

@@ -127,3 +127,6 @@ JDK/trust settings. Do not disable TLS checks.
 Final Android gate passed with Temurin 21.0.13+9 in 46.4 seconds. During the
 final build TMPDIR=/workspace/toolchains/tmp kept compiler temporaries on the
 volume with free space. See validation/android-build-final.txt for raw output.
+
+After integration with existing M0 history, the final branch passed all 11 tests
+and repeated the Android debug build in 4.1 seconds with cached tools.

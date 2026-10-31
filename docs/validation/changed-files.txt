@@ -26,6 +26,7 @@ android/gradle.properties
 android/gradle/wrapper/gradle-wrapper.properties
 android/settings.gradle.kts
 docs/ARCHITECTURE.md
+docs/DEPENDENCIES.md
 docs/DEVELOPMENT.md
 docs/STATUS.md
 docs/licenses/async.txt
@@ -108,10 +109,12 @@ ios/Runner/Info.plist
 ios/Runner/Runner-Bridging-Header.h
 ios/Runner/SceneDelegate.swift
 ios/RunnerTests/RunnerTests.swift
+lib/domain/contracts.dart
 lib/domain/measurement.dart
 lib/main.dart
 pubspec.lock
 pubspec.yaml
+test/contracts_test.dart
 test/measurement_test.dart
 test/widget_test.dart
 tool/check_licenses.py

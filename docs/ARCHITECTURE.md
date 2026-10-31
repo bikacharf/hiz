@@ -63,3 +63,7 @@ monotonic microseconds supplied by future native capture metadata. A lens/zoom
 change requires a fresh track. Unknown quality gates cannot pass. Scale priors,
 quality thresholds and speed algorithms are deliberately unspecified pending
 milestone research. The UI never creates measurement candidates.
+
+`lib/domain/contracts.dart` is the public export for the canonical measurement
+contracts. There is one quality gate vocabulary; M0 supplies no empirical size
+or duration thresholds. Original dependency notice hashes are checked offline.
