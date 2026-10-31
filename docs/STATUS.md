@@ -4,8 +4,56 @@ Last updated: 2026-10-31
 
 ## Current phase
 
-M0 — development shell implemented and Linux/Android gates passed.
-iOS explicitly requires Mac/Xcode verification.
+M1 — model-independent offline harness slice delivered; **M1 is not complete**.
+Base: main ba5f071. Branch: codex/m1-offline-harness.
+iOS still requires Mac/Xcode verification.
+
+## M1 first slice and evidence
+
+- Deterministic synthetic detection-fixture input with explicit person/bicycle/
+  vehicle/car/ball annotation mapping and unsupported labels.
+- Single-target geometry association preserves identity through a two-frame
+  occlusion budget; the third miss ends the identity. Subsequent acquisition
+  creates a new ID. Ambiguity never picks a candidate based on order or score.
+- Explicit selection, class changes, lens/zoom/image-geometry discontinuities,
+  monotonic capture timestamps, source provenance and per-frame JSONL evidence.
+- Bundled repository-authored synthetic fixture plus expected evidence and tests.
+  No camera frames, personal media, model weights or inference are involved.
+- Labeled app screen runs the same synthetic fixture; it is not video detection.
+  Every evidence record marks measurementAvailable=false and has no speed field.
+- No new dependency. Existing 26-package version/license/notice-hash gate passes.
+
+| M1 validation command | Observed result |
+|---|---|
+| flutter pub get --enforce-lockfile | PASS; lockfile unchanged |
+| dart format --output=none --set-exit-if-changed lib test tool | PASS; 10 files unchanged |
+| flutter analyze --no-pub | PASS; no issues, 7.2 seconds |
+| flutter test --no-pub | PASS; 21 tests (9 harness, 2 widget, 10 existing domain) |
+| python3 tool/check_licenses.py | PASS; 26 unchanged dependency records |
+| flutter build apk --debug --no-pub | PASS; APK produced in 23.2 seconds |
+| CLI export twice + cmp against expected evidence | PASS; byte-identical JSONL |
+| CLI input/output alias and malformed input checks | PASS; nonzero exit, no invalid output |
+
+Exact evidence and fixture hashes: docs/validation/m1-checks.txt.
+Android build was not a device run. Remote CI and iOS compilation were not
+verified here. All network-capable validation commands carried explicit additional
+network permission; session-only tool/cache/CA settings follow DEVELOPMENT.md.
+
+## Remaining M1 blockers and next action
+
+1. A specific model artifact must have a verifiable accompanying license and
+   commercial redistribution provenance. MediaPipe runtime Apache-2.0 does not
+   establish EfficientDet/MediaPipe weights licensing. No weights downloaded.
+2. Real local-video import/decoder, timestamp/geometry adapter and licensed
+   detector integration are absent. Validate these on approved video fixtures
+   before claiming real detection or tracking behavior.
+3. Mac/Xcode and reference-device validation remain open. Follow DEVELOPMENT.md
+   and additionally exercise the labeled offline screen on the simulator.
+
+See M1_OFFLINE_HARNESS.md for policies, schemas, association limitations and
+reproduction. M1 remains partial; no scale, speed or accuracy claim is made.
+
+## Historical M0 evidence (retained below)
 
 ## Confirmed product decisions
 
@@ -68,7 +116,7 @@ and transitive notices. It is not a legal certification or exhaustive Maven audi
 - Quality gates and schemas are architecture scaffolding; no threshold or scale
   method has been empirically accepted, and no accuracy claim is made.
 
-## Next action
+## M0 handoff (historical)
 
 Review M0 evidence and complete the Mac/Xcode checks. Then plan M1: licensed offline detection/tracking harness with approved fixtures,
 repeatable evidence, explicit unsupported cases, and no numeric speed output.

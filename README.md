@@ -28,3 +28,9 @@ Mevcut uygulama yalnızca açıkça etiketlenmiş koyu/nane arayüz prototipidir
 Kamera, algılama, takip, otomatik ölçek ve hız ölçümü henüz uygulanmamıştır.
 Kurulum, sabit sürümler, doğrulama komutları ve zorunlu Mac/Xcode kontrolleri:
 [Development guide](docs/DEVELOPMENT.md).
+
+## M1: model bekleyen çevrimdışı test düzeneği
+
+Uygulamadaki etiketli offline ekran, yalnızca repoda yazılmış sentetik gözlem
+senaryosunu çalıştırır. Gerçek model, video içe aktarma/decoder ve hız üretimi yoktur.
+[Çalıştırma, kanıt şeması ve kalan M1 engelleri](docs/M1_OFFLINE_HARNESS.md).

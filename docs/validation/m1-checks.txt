@@ -1,0 +1,16 @@
+M1 first slice, 2026-10-31, base main ba5f071
+Flutter 3.47.9 / Dart 3.13.7 / Temurin JDK 21.0.13+9
+flutter pub get --enforce-lockfile: PASS; pubspec.lock unchanged
+dart format --output=none --set-exit-if-changed lib test tool: PASS, 10 files unchanged
+flutter analyze --no-pub: PASS, no issues (7.2s)
+flutter test --no-pub: PASS, all 21 tests
+python3 tool/check_licenses.py: PASS, 26 locked packages and notice hashes
+flutter build apk --debug --no-pub: PASS, 23.2s; APK generated
+CLI two exports compared with cmp: PASS, identical to expected JSONL
+CLI same input/output: rejected; malformed schema: rejected without output
+iOS/Mac/device and remote CI: NOT VERIFIED
+No model downloaded, installed or bundled. No new dependency.
+
+Authored synthetic fixture/evidence SHA-256:
+5ee12f62b9b5130bbf2d040cba7410c309475be59d896570315a43d90f7a893e  assets/fixtures/occlusion.json
+e29e4da2227a17f98adbe9f0e5b3a39e463b86fb798562abbb11de3f019247a3  test/fixtures/occlusion.expected.jsonl
