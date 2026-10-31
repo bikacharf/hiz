@@ -25,11 +25,17 @@ iOS still requires Mac/Xcode verification.
   speed until a subtype exists.
 - The real LiteRT wrapper is isolated from pure unit tests and is not connected
   to the prototype UI. No failed inference produces mock detections.
-- Local `python tool/check_licenses.py`: PASS, 30 locked packages and one model.
-  Flutter format/analyze/test/Android build remain pending because this Windows
-  machine has no installed Flutter SDK and the saved Cloud host became
-  unavailable while task creation was attempted. Do not treat this slice as
-  merged or validated until those gates pass.
+- GitHub Actions run 41249022684 on commit `574488d` passed the locked package
+  restore, format, analysis, all 36 tests, the 30-package plus one-model license
+  gate, and a real Android debug APK build with Flutter 3.47.9.
+- CI was repaired for the removed Android SDK `tools` package, current Java 21
+  patch resolution, and Java/Kotlin bytecode target alignment across Flutter
+  plugin modules. The detector now validates active boxes before score/class
+  filtering so malformed model output fails closed.
+- Local `python tool/check_licenses.py` also passes. This Windows machine still
+  has no installed Flutter SDK; the full Flutter gates above were run remotely.
+  Physical-device and iOS checks remain pending, so do not infer runtime speed,
+  thermal, camera, or measurement accuracy from the successful APK build.
 
 ## M1 first slice and evidence
 
