@@ -239,10 +239,13 @@ List<DetectionObservation> parseEfficientDetOutput(
     if (!classValue.isFinite || classValue < 0 || classValue % 1 != 0) {
       throw const FormatException('Invalid EfficientDet class');
     }
+    // Validate every active box before applying score/class filters. A corrupt
+    // model result must fail closed instead of disappearing as a low-score or
+    // unsupported detection.
+    final box = transform.sourceBox(output.boxes[index]);
     if (score < minimumScore) continue;
     final targetClass = _targetForCocoIndex(classValue.toInt());
     if (targetClass == null) continue;
-    final box = transform.sourceBox(output.boxes[index]);
     if (box == null) continue;
     detections.add(
       DetectionObservation(
