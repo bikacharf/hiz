@@ -8,7 +8,8 @@ const efficientDetLite0Asset =
     'assets/models/efficientdet_lite0_metadata_v1.tflite';
 
 /// Mobile runtime only. Video decoding and frame scheduling remain outside this
-/// adapter. The interpreter is deliberately not loaded by the prototype UI.
+/// adapter. The local-video prototype loads this interpreter only after the
+/// user explicitly selects a file.
 class TfliteEfficientDetRuntime implements EfficientDetRuntime {
   TfliteEfficientDetRuntime._(this._interpreter);
 

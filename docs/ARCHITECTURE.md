@@ -93,3 +93,22 @@ the bundled model. It is separate from the synthetic fixture harness. Neither
 adapter decodes video, schedules frames, tracks targets, estimates metric scale,
 or produces speed. A coarse ball observation has no subtype; the measurement
 contract rejects numeric ball speed until a subtype is explicitly available.
+
+## M1 local-video boundary
+
+`lib/video/local_video_source.dart` defines the local picker/decoder session
+contract. Native Android uses `ACTION_OPEN_DOCUMENT`, `MediaExtractor` and
+`MediaCodec`; native iOS uses `UIDocumentPickerViewController` and
+`AVAssetReaderTrackOutput`. No third-party decoder or upload service is added.
+Decoded frames are converted to upright RGB888 with a maximum 640-pixel side.
+Every frame keeps its native presentation timestamp in microseconds; duplicate
+or decreasing PTS, malformed RGB buffers, unsupported orientation, inaccessible
+files and decoder failures stop the analysis instead of falling back to mock
+frames or assumed FPS.
+
+`lib/video/local_video_analysis.dart` runs at most 120 decoded frames through the
+reviewed EfficientDet adapter and returns only coarse per-class detection counts.
+The visible page labels the limit and explicitly reports that tracking and speed
+are unavailable. Local video contents and URI values are not added to evidence,
+history, analytics or network requests. Source-content hashing, real-video track
+association and approved-fixture evidence remain separate follow-up work.

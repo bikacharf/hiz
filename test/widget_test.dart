@@ -23,10 +23,13 @@ void main() {
     tester,
   ) async {
     await tester.pumpWidget(const HizApp());
-    expect(
-      find.text('M1 • Model bekleyen offline harness prototipi'),
-      findsOneWidget,
-    );
+    expect(find.text('M1 • Çevrimdışı algılama prototipi'), findsOneWidget);
+    await tester.tap(find.text('Yerel video analizi'));
+    await tester.pumpAndSettle();
+    expect(find.widgetWithText(AppBar, 'Yerel video analizi'), findsOneWidget);
+    expect(find.textContaining('Sayısal hız göstermez'), findsOneWidget);
+    await tester.pageBack();
+    await tester.pumpAndSettle();
     for (final label in ['Kamera', 'Geçmiş', 'Profil']) {
       await tester.tap(find.widgetWithText(TextButton, label).first);
       await tester.pumpAndSettle();

@@ -4,9 +4,25 @@ Last updated: 2026-11-01
 
 ## Current phase
 
-M1 — the validated licensed model detector adapter is merged into `main` after
-the model-independent harness; **M1 is not complete**.
-iOS still requires Mac/Xcode verification.
+M1 — local-video picker/decoder and detector integration is being implemented on
+`codex/m1-local-video-decoder`; **M1 is not complete**. Android CI and iOS
+Mac/Xcode verification for this slice are pending.
+
+## M1 local-video slice in progress
+
+- Added a dependency-free platform channel for local video selection and
+  session-scoped decoding. Video remains on device.
+- Android uses the system document picker plus MediaExtractor/MediaCodec flexible
+  YUV output. iOS uses a copied document-picker URL plus AVAssetReader BGRA output.
+- Both native paths downsample to a maximum 640-pixel side, rotate to upright
+  RGB888, and return source presentation timestamps rather than UI/FPS timing.
+- Dart validates metadata, byte counts, strictly increasing PTS and closed-session
+  behavior. Failures never substitute a synthetic frame.
+- Added a visible `Yerel video analizi` screen that analyzes at most 120 frames
+  and reports coarse detection counts only. Tracking and speed remain unavailable.
+- No dependency, model, dataset or network service was added. Android build and
+  runtime checks, Swift compilation, approved real-video fixture evidence and
+  device performance remain unverified at this point.
 
 ## M1 licensed detector slice
 
@@ -22,8 +38,9 @@ iOS still requires Mac/Xcode verification.
 - Coarse sports-ball output never invents football/basketball/tennis subtype.
   The domain allows an untyped coarse ball detection but blocks numeric ball
   speed until a subtype exists.
-- The real LiteRT wrapper is isolated from pure unit tests and is not connected
-  to the prototype UI. No failed inference produces mock detections.
+- The real LiteRT wrapper remains isolated from pure unit tests and is now loaded
+  by the local-video prototype only after explicit file selection. No failed
+  inference produces mock detections.
 - GitHub Actions run 41249022684 on commit `574488d` passed the locked package
   restore, format, analysis, all 36 tests, the 30-package plus one-model license
   gate, and a real Android debug APK build with Flutter 3.47.9.
@@ -78,9 +95,10 @@ network permission; session-only tool/cache/CA settings follow DEVELOPMENT.md.
 
 1. Run the bundled model/runtime on physical Android and iOS devices and audit
    the notices inside generated release binaries before distribution.
-2. Real local-video import/decoder and timestamp/geometry adapter are absent.
-   Validate them with the detector on approved video fixtures
-   before claiming real detection or tracking behavior.
+2. Validate the new local-video decoder with approved portrait/landscape videos
+   on a named Android reference device and run the documented Mac/Xcode check.
+   Then connect decoded detections to target selection/tracking evidence before
+   claiming real tracking behavior.
 3. Source-content hashing and evidence-to-source cryptographic binding are
    deferred. No crypto dependency was added. Declared fixture IDs/metadata and
    repository validation SHA values do not replace per-artifact content identity.

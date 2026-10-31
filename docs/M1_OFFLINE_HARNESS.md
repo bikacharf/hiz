@@ -141,6 +141,40 @@ identity and fail-closed assertions, not proof of detector or speed performance.
 
 ## Remaining M1 blockers
 
+### Local-video prototype
+
+The app now has a separate `Yerel video analizi` route. It uses the platform
+document picker, decodes upright RGB frames on device, preserves source PTS and
+runs up to the first 120 frames through the bundled EfficientDet adapter. The
+screen reports only decoded-frame and coarse detection counts. It does not feed
+the synthetic association harness, select a target, export real-video evidence,
+or produce speed.
+
+Android follows the platform `ACTION_OPEN_DOCUMENT` and MediaCodec path. iOS
+uses a copied document-picker result and AVAssetReader BGRA output. Platform API
+sources:
+
+- https://developer.android.com/training/data-storage/shared/documents-files
+- https://developer.android.com/reference/android/media/MediaExtractor
+- https://developer.android.com/reference/android/media/MediaCodec
+- https://developer.apple.com/documentation/uikit/uidocumentpickerviewcontroller
+- https://developer.apple.com/documentation/avfoundation/avassetreadertrackoutput
+
+Required iOS Mac check:
+
+1. Open `ios/Runner.xcworkspace` in the repository's pinned Xcode environment.
+2. Build the `Runner` scheme for an iOS 15+ simulator and a physical reference
+   iPhone; record Xcode, iOS and device model.
+3. Open `Yerel video analizi`; verify picker cancellation returns without an
+   error and a short portrait/landscape video starts analysis.
+4. Verify decoded dimensions are upright, the UI remains responsive, the first
+   120-frame limit is disclosed, and no numeric speed appears.
+5. Repeat selection and a decoder failure to check sessions are released and no
+   previous detections are reused.
+
+Until this checklist is recorded, the Swift code is prepared but iOS support is
+not verified.
+
 - Runtime source-content hashing and binding a source artifact to each evidence
   record are deferred. fixtureId and adapter metadata are declarations, not
   cryptographic content identity. No crypto dependency was added. Repository
@@ -150,8 +184,8 @@ identity and fail-closed assertions, not proof of detector or speed performance.
 - Run the bundled model on physical Android and iOS devices and retain an
   approved non-personal smoke-test artifact; desktop unit tests do not establish
   mobile runtime compatibility or detection quality.
-- Implement local video import/decoder and capture metadata adapter. Preserve
-  timestamps, rotation/image transforms, lens/zoom provenance and frame lifetime.
+- Validate the local video import/decoder and capture metadata adapter on named
+  reference devices with approved portrait and landscape fixtures.
 - Connect a licensed real detector to observations and validate tracking on
   approved videos. No real-video detection or tracking success is claimed here.
 - iOS compilation/runtime still require Mac/Xcode; use DEVELOPMENT.md checklist
