@@ -24,5 +24,11 @@ for item in reviewed:
     assert item['source'].startswith('https://'), item
     notice = (root / item['notice']).read_bytes()
     assert notice.strip(), item
-    assert hashlib.sha256(notice).hexdigest() == item['notice_sha256'], item
+    # Git may materialize text files with CRLF on Windows. The inventory hashes
+    # the canonical LF representation stored in the repository, so normalize
+    # only line endings before comparing the reviewed notice hash.
+    canonical_notice = notice.replace(b'\r\n', b'\n')
+    assert (
+        hashlib.sha256(canonical_notice).hexdigest() == item['notice_sha256']
+    ), item
 print(f'PASS: {len(reviewed)} locked packages have reviewed license records')
