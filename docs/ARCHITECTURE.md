@@ -77,3 +77,19 @@ state machine with conservative spatial association and explicit gap/ambiguity/
 loss/optics/class-change outcomes. JSON Lines preserve original per-frame inputs
 and provenance; they never contain a speed estimate. See M1_OFFLINE_HARNESS.md
 for schema, deterministic selection policy and unvalidated association limits.
+
+## M1 model detector boundary
+
+`lib/detection/efficientdet_lite0.dart` adds a model-specific but runtime-testable
+adapter. It accepts complete upright RGB888 frames with source PTS, preserves
+aspect ratio with deterministic 320x320 letterboxing, validates the exact input
+and output tensor names/shapes/types, and converts model boxes back to normalized
+source-image coordinates. Only reviewed COCO indexes become typed observations.
+Other valid COCO categories are ignored rather than relabeled; malformed classes,
+scores, counts, boxes or tensor contracts fail the frame.
+
+`lib/detection/tflite_efficientdet_runtime.dart` is the mobile FFI boundary for
+the bundled model. It is separate from the synthetic fixture harness. Neither
+adapter decodes video, schedules frames, tracks targets, estimates metric scale,
+or produces speed. A coarse ball observation has no subtype; the measurement
+contract rejects numeric ball speed until a subtype is explicitly available.

@@ -1,8 +1,8 @@
 # Third-party notices — M0
 
-Commercial compatibility review: only permissive Flutter/Dart ecosystem components
-and platform build tools are admitted. No detector, model, weights or dataset is
-included. The application remains proprietary; third-party terms still apply.
+Commercial compatibility review: only permissive Flutter/Dart ecosystem components,
+the reviewed LiteRT runtime, and the reviewed EfficientDet-Lite0 artifact are
+admitted. The application remains proprietary; third-party terms still apply.
 
 ## Toolchain and platform code
 
@@ -94,7 +94,8 @@ commercial proprietary compilation is permitted by the toolchain terms.
 
 ## M1 model-independent slice
 
-No new dependency, copied algorithm, model weights or external dataset is added.
+The first synthetic slice added no dependency, copied algorithm, model weights or
+external dataset.
 `assets/fixtures/occlusion.json` and `test/fixtures/occlusion.expected.jsonl` are
 original repository-authored synthetic annotations/evidence; no third-party asset
 license or personal recording is involved. The IoU arithmetic and harness are
@@ -103,3 +104,33 @@ MediaPipe runtime source (https://github.com/google-ai-edge/mediapipe) is identi
 as Apache-2.0 but is **not installed or bundled**. This does not license separate
 EfficientDet/MediaPipe weights. Model acceptance is blocked pending a verifiable
 license accompanying a specific artifact and commercial redistribution review.
+
+## M1 licensed detector slice
+
+| Component | Version/artifact | Source | License | Purpose/review |
+|---|---|---|---|---|
+| tflite_flutter | 0.12.1 | https://pub.dev/packages/tflite_flutter | Apache-2.0 | TensorFlow-managed Flutter FFI adapter; Android and iOS runtime bridge |
+| LiteRT Android runtime + GPU | 1.4.0 | https://github.com/google-ai-edge/LiteRT | Apache-2.0 | Native dependencies selected by the plugin Android build file |
+| TensorFlowLiteSwift | 2.12.0 | https://github.com/tensorflow/tensorflow | Apache-2.0 plus upstream TensorFlow notices | Native iOS dependency selected by the plugin podspec; Mac build still unverified |
+| EfficientDet-Lite0 detection metadata | Kaggle TensorFlow variation 1, 4,563,519 bytes, SHA-256 `2e04c53bfeac0ac2a30c057c7e2a777594ce39baaac35a92f74fb1e8c4fc4e0b` | https://www.kaggle.com/models/tensorflow/efficientdet/tfLite/lite0-detection-metadata/1 | Apache-2.0 | COCO 2017 coarse object detector; bundled model and embedded label map |
+
+The exact Kaggle download URL, artifact digest, size, tensor contract, class map,
+training-data declaration and limitations are machine checked in
+`docs/models/inventory.json`. TensorFlow's original Lite0 model card identifies
+the model and COCO 2017 training source. The LiteRT Community mirror identifies
+the same `tensorflow/efficientdet/lite0/detection/1` deployment as Apache-2.0;
+Kaggle's TensorFlow EfficientDet metadata variations expose Apache-2.0 licensing.
+This is a documented prototype compatibility review, not legal certification;
+release counsel should re-check the model page and all generated store-binary
+notices before commercial distribution.
+
+The detector maps only embedded COCO label indexes: person, bicycle,
+car/motorcycle/bus/truck to coarse vehicle, and sports ball to coarse ball.
+It never infers football, basketball or tennis. No model benchmark is treated as
+speed-measurement accuracy. The runtime and model add detection only; video
+decoding, metric scale and speed remain absent.
+
+New locked Dart packages: tflite_flutter 0.12.1 (Apache-2.0), ffi 2.2.0
+(BSD-3-Clause), plugin_platform_interface 2.1.8 (BSD-3-Clause), and quiver
+3.2.2 (Apache-2.0). Their original package license text is retained or reused
+byte-for-byte where identical. The checked inventory now contains 30 packages.

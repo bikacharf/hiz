@@ -24,8 +24,8 @@ TrackingObservation track(List<DetectionObservation> observations) =>
     );
 
 void main() {
-  test('ball subtype is mandatory and exclusive', () {
-    expect(() => Target(TargetClass.ball), throwsArgumentError);
+  test('coarse balls are allowed but only balls may carry a subtype', () {
+    expect(Target(TargetClass.ball).ballType, isNull);
     expect(
       () => Target(TargetClass.person, ballType: BallType.tennis),
       throwsArgumentError,
@@ -83,6 +83,32 @@ void main() {
       limitations: ['method not implemented'],
     );
     expect(unavailable.metersPerSecond, isNull);
+  });
+  test('coarse ball detections cannot carry numeric speed', () {
+    DetectionObservation ball(int timestampUs) => DetectionObservation(
+      capture: frame(timestampUs),
+      target: Target(TargetClass.ball),
+      box: NormalizedBox(.1, .1, .2, .2),
+      score: .8,
+      modelVersion: 'coarse-detector-test',
+    );
+    final gates = {for (final gate in QualityGate.values) gate: true};
+    expect(
+      () => MeasurementCandidate(
+        track: track([ball(1), ball(2)]),
+        quality: QualitySignals(gates),
+        buildVersion: 'test',
+        limitations: ['ball subtype unavailable'],
+        scale: ScaleHypothesis(
+          method: 'test-only',
+          metersPerPixel: .01,
+          uncertainty: .5,
+          assumptions: ['not validated'],
+        ),
+        metersPerSecond: 1,
+      ),
+      throwsArgumentError,
+    );
   });
   test('invalid observable quality metrics are rejected', () {
     expect(() => QualityMetrics(blur: double.nan), throwsArgumentError);
