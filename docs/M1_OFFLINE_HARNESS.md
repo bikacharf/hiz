@@ -39,9 +39,34 @@ there is no upload. The application has a labeled offline screen and a button
 that runs this same bundled synthetic fixture and displays selectable JSON Lines.
 It provides no video picker, real detection overlay or numeric speed.
 
-## Input schema 1
+## Input schema 2
 
-`schemaVersion: 1`, `origin: synthetic`, nonempty `fixtureId`, nonempty `frames`.
+`schemaVersion: 2`, `origin: synthetic`, nonempty `fixtureId`, nonempty `frames`.
+The mandatory `sourceManifest` has exactly these supported field values:
+
+```json
+{
+  "timestampSource": "sourcePtsUs",
+  "coordinateSystem": "normalizedTopLeft",
+  "rotationDegrees": 0,
+  "declaredFrameCount": 9,
+  "detectionAdapter": {"type": "syntheticAnnotations", "version": "1"}
+}
+```
+
+`declaredFrameCount` is a positive integer equal to the actual frame list length;
+9 above is only this repository fixture's count. Rotation must be integer 0;
+nonzero rotation is rejected rather than silently transformed. Coordinates have
+origin at the top left, x increasing right and y increasing down, normalized to
+[0,1]. Only the named adapter type and string version are supported. Missing,
+wrongly typed or unsupported manifest values reject the whole fixture. Schema 1
+is no longer accepted because it lacks this provenance contract.
+
+`timestampSource` describes the `capture.timestampUs` values: original source PTS
+in microseconds. Here those PTS values are hand-authored synthetic annotations,
+not decoder output. Future decoded PTS must be supplied by the adapter; no UI
+clock, assumed FPS, resampling or replacement timing is accepted/generated.
+
 Each frame contains `capture` (monotonic integer `timestampUs`, nonempty `lensId`,
 positive finite `zoom`, positive integer `width`/`height`) and `detections`.
 Each observation has a frame-local unique nonempty `id`, `label`, `modelVersion`,
@@ -70,6 +95,11 @@ must be independently reviewed before an adapter can use this mapping.
   the third ends the identity as lost. Recovery inside this budget keeps the ID;
   recovery after loss acquires a new sequential ID. The budget counts supplied
   frames, not elapsed time, so omitted frames/long gaps are not simulated.
+  **There is no elapsed-time timeout.** Even a very large PTS gap can retain an
+  identity when the supplied frame miss budget has not expired and one spatial
+  match exists. `lost` means that the configured count of supplied missed frames
+  was exceeded, not that a real-time loss duration was measured. A time-based
+  expiry policy remains unimplemented and must be chosen before real-video use.
 - A unique spatial match with changed class ends the identity with classChanged
   (or unsupported). No silent target relabeling. A selected unsupported annotation
   also terminates the old track. Explicit selection always creates a new ID.
@@ -83,18 +113,34 @@ No motion prediction, interpolation or fabricated boxes are emitted during gaps.
 IoU alone cannot guarantee identity when objects cross, disappear or move far;
 a unique overlap can still be wrong in real video. This limitation is explicit.
 
-## Evidence schema 1
+## Evidence schema 2
 
 One JSON object per supplied frame, always in input order. Records include fixture
 and synthetic provenance, harness version, frame index, original capture metadata,
 all input observations/model identities, selection, unsupported IDs, policy,
 state/reason, active/ended track ID, misses, observed observation ID and last
-observed capture time. Current observation is null during gaps or ambiguity.
+observed capture time. Every record includes the complete validated `sourceManifest` (timestamp source,
+coordinate system, rotation, declared total frame count and adapter type/version).
+Current observation is null during gaps or ambiguity. An all-empty sequence still
+emits exactly one record per frame, with empty inputDetections; frames are not
+filtered out. Variable PTS values and long gaps are preserved without invented FPS.
+
+Canonical JSONL here means the deterministic writer's key order and encoding
+under the pinned Dart SDK, not RFC 8785 canonicalization. Parsing, re-encoding
+and parsing again preserves nested JSON meaning; a regression test also checks
+byte stability of the writer's own output. It does not normalize arbitrary
+third-party JSON key orders or provide cryptographic integrity.
 `measurementAvailable` is always false; no numeric speed field is exported.
 The expected JSONL is a regression artifact, checked alongside independent state,
 identity and fail-closed assertions, not proof of detector or speed performance.
 
 ## Remaining M1 blockers
+
+- Runtime source-content hashing and binding a source artifact to each evidence
+  record are deferred. fixtureId and adapter metadata are declarations, not
+  cryptographic content identity. No crypto dependency was added. Repository
+  validation-file SHA-256 values are build evidence only and do not close this
+  harness provenance/integrity gap.
 
 - Accept a specific model's verifiable commercial redistribution license and
   artifact provenance, then review the runtime/model as separate components.

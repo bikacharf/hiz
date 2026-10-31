@@ -34,18 +34,56 @@ class FixtureFrame {
   final String? selection;
 }
 
+/// Validated source contract, copied into every evidence record.
+class FixtureSourceManifest {
+  FixtureSourceManifest._(this.declaredFrameCount);
+  final int declaredFrameCount;
+
+  factory FixtureSourceManifest.parse(Map<String, dynamic> json) {
+    require(json['timestampSource'] == 'sourcePtsUs', 'Source PTS required');
+    require(
+      json['coordinateSystem'] == 'normalizedTopLeft',
+      'Only normalized top-left coordinates are supported',
+    );
+    require(
+      json['rotationDegrees'] is int && json['rotationDegrees'] == 0,
+      'Only integer zero rotation is supported',
+    );
+    final count = json['declaredFrameCount'];
+    require(count is int && count > 0, 'Positive integer frame count required');
+    final adapter = json['detectionAdapter'] as Map<String, dynamic>;
+    require(
+      adapter['type'] == 'syntheticAnnotations' && adapter['version'] == '1',
+      'Unsupported detection adapter type/version',
+    );
+    return FixtureSourceManifest._(count as int);
+  }
+
+  Map<String, Object> toJson() => {
+    'timestampSource': 'sourcePtsUs',
+    'coordinateSystem': 'normalizedTopLeft',
+    'rotationDegrees': 0,
+    'declaredFrameCount': declaredFrameCount,
+    'detectionAdapter': {'type': 'syntheticAnnotations', 'version': '1'},
+  };
+}
+
 class DetectionFixture {
-  DetectionFixture._(this.id, List<FixtureFrame> frames)
+  DetectionFixture._(this.id, this.sourceManifest, List<FixtureFrame> frames)
     : frames = List.unmodifiable(frames);
   final String id;
+  final FixtureSourceManifest sourceManifest;
   final List<FixtureFrame> frames;
 
   factory DetectionFixture.parse(String source) {
     try {
       final root = jsonDecode(source) as Map<String, dynamic>;
       require(
-        root['schemaVersion'] == 1 && root['origin'] == 'synthetic',
-        'Only schema 1 synthetic fixtures are accepted',
+        root['schemaVersion'] == 2 && root['origin'] == 'synthetic',
+        'Only schema 2 synthetic fixtures are accepted',
+      );
+      final manifest = FixtureSourceManifest.parse(
+        root['sourceManifest'] as Map<String, dynamic>,
       );
       final id = root['fixtureId'] as String;
       require(id.isNotEmpty, 'Fixture ID required');
@@ -108,7 +146,11 @@ class DetectionFixture {
         frames.add(FixtureFrame(capture, detections, selection));
       }
       require(frames.isNotEmpty, 'At least one frame required');
-      return DetectionFixture._(id, frames);
+      require(
+        manifest.declaredFrameCount == frames.length,
+        'Declared frame count mismatch',
+      );
+      return DetectionFixture._(id, manifest, frames);
     } catch (error) {
       throw FormatException('Invalid detection fixture: $error');
     }
@@ -260,10 +302,11 @@ class OfflineHarness {
       }
       lines.add(
         jsonEncode({
-          'schemaVersion': 1,
+          'schemaVersion': 2,
           'fixtureId': fixture.id,
           'origin': 'synthetic',
-          'harnessVersion': 'offline-iou-v1',
+          'harnessVersion': 'offline-iou-v2',
+          'sourceManifest': fixture.sourceManifest.toJson(),
           'frameIndex': index,
           'capture': {
             'timestampUs': capture.timestampUs,
@@ -291,6 +334,8 @@ class OfflineHarness {
             'syntheticObservationsOnly',
             'modelLicensePending',
             'videoDecoderNotIntegrated',
+            'contentHashNotImplemented',
+            'frameBudgetOnlyNoElapsedTimeTimeout',
             'noSpeed',
           ],
         }),

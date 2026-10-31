@@ -1,5 +1,5 @@
 {
-  "schemaVersion": 1,
+  "schemaVersion": 2,
   "origin": "synthetic",
   "fixtureId": "authored-occlusion-v1",
   "frames": [
@@ -158,5 +158,15 @@
         }
       ]
     }
-  ]
+  ],
+  "sourceManifest": {
+    "timestampSource": "sourcePtsUs",
+    "coordinateSystem": "normalizedTopLeft",
+    "rotationDegrees": 0,
+    "declaredFrameCount": 9,
+    "detectionAdapter": {
+      "type": "syntheticAnnotations",
+      "version": "1"
+    }
+  }
 }

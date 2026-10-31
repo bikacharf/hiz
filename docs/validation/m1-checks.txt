@@ -1,16 +1,26 @@
-M1 first slice, 2026-10-31, base main ba5f071
+M1 pre-merge review fixes, 2026-10-31
+Parent implementation: 27e356b07e57bcf99999eafba7c6e0c79c4ff91c
+Branch unchanged: codex/m1-offline-harness
 Flutter 3.47.9 / Dart 3.13.7 / Temurin JDK 21.0.13+9
-flutter pub get --enforce-lockfile: PASS; pubspec.lock unchanged
-dart format --output=none --set-exit-if-changed lib test tool: PASS, 10 files unchanged
-flutter analyze --no-pub: PASS, no issues (7.2s)
-flutter test --no-pub: PASS, all 21 tests
-python3 tool/check_licenses.py: PASS, 26 locked packages and notice hashes
-flutter build apk --debug --no-pub: PASS, 23.2s; APK generated
-CLI two exports compared with cmp: PASS, identical to expected JSONL
-CLI same input/output: rejected; malformed schema: rejected without output
-iOS/Mac/device and remote CI: NOT VERIFIED
-No model downloaded, installed or bundled. No new dependency.
 
-Authored synthetic fixture/evidence SHA-256:
-5ee12f62b9b5130bbf2d040cba7410c309475be59d896570315a43d90f7a893e  assets/fixtures/occlusion.json
-e29e4da2227a17f98adbe9f0e5b3a39e463b86fb798562abbb11de3f019247a3  test/fixtures/occlusion.expected.jsonl
+dart format --output=none --set-exit-if-changed lib test tool: PASS, 10 files unchanged
+flutter analyze --no-pub: PASS, no issues (6.4s)
+flutter test --no-pub: PASS, 26 tests
+python3 tool/check_licenses.py: PASS, 26 existing package/license/notice-hash records
+flutter build apk --debug --no-pub: PASS, 6.2s; APK produced
+CLI schema-2 export twice + cmp against expected JSONL: PASS, identical
+CLI input/output alias: rejected; malformed schema: rejected without output
+
+New tests: required manifest validation and every-record propagation; all-empty
+frames produce one record each; variable PTS/long gaps with no default FPS or
+elapsed-time expiry; canonical JSONL parse/re-encode/parse semantic equality.
+Existing ambiguity tests still pass without score/order-based candidate picking.
+
+No new model/dependency/crypto package. Runtime source-content hash and per-record
+cryptographic binding remain DEFERRED. Validation-file hashes below identify repo
+artifacts only, not a completed harness integrity feature.
+iOS/Mac/device and remote CI: NOT VERIFIED.
+
+Authored synthetic fixture/evidence SHA-256 (validation artifacts only):
+8dde05ea01a1608f7c935af2efa8a759625d07e7d7c1d0edc15f23291f98cf5e  assets/fixtures/occlusion.json
+7732cea4d3f2d0f0b3d924172951434fee71001ccbfa5e4943a574d47f18cf79  test/fixtures/occlusion.expected.jsonl

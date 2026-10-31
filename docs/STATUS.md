@@ -12,11 +12,18 @@ iOS still requires Mac/Xcode verification.
 
 - Deterministic synthetic detection-fixture input with explicit person/bicycle/
   vehicle/car/ball annotation mapping and unsupported labels.
-- Single-target geometry association preserves identity through a two-frame
-  occlusion budget; the third miss ends the identity. Subsequent acquisition
-  creates a new ID. Ambiguity never picks a candidate based on order or score.
+- Single-target geometry association preserves identity for up to two supplied
+  missed frames; the third miss ends the identity. This is not
+  an elapsed-time loss policy; arbitrarily long PTS gaps alone do not expire it.
+  Subsequent acquisition creates a new ID. Ambiguity never picks a candidate based on order or score.
+- Mandatory schema-2 source manifest: sourcePtsUs only, normalizedTopLeft,
+  integer rotation 0, declared frame count, syntheticAnnotations adapter version 1.
+  All fields are validated and included in every per-frame evidence record.
 - Explicit selection, class changes, lens/zoom/image-geometry discontinuities,
   monotonic capture timestamps, source provenance and per-frame JSONL evidence.
+- Review tests cover all-empty detection sequences without omitted records,
+  irregular source PTS (including long gaps) without invented FPS/time expiry,
+  complete metadata in every record and canonical JSONL semantic round-trips.
 - Bundled repository-authored synthetic fixture plus expected evidence and tests.
   No camera frames, personal media, model weights or inference are involved.
 - Labeled app screen runs the same synthetic fixture; it is not video detection.
@@ -27,10 +34,10 @@ iOS still requires Mac/Xcode verification.
 |---|---|
 | flutter pub get --enforce-lockfile | PASS; lockfile unchanged |
 | dart format --output=none --set-exit-if-changed lib test tool | PASS; 10 files unchanged |
-| flutter analyze --no-pub | PASS; no issues, 7.2 seconds |
-| flutter test --no-pub | PASS; 21 tests (9 harness, 2 widget, 10 existing domain) |
+| flutter analyze --no-pub | PASS; no issues, 6.4 seconds |
+| flutter test --no-pub | PASS; 26 tests (14 harness, 2 widget, 10 existing domain) |
 | python3 tool/check_licenses.py | PASS; 26 unchanged dependency records |
-| flutter build apk --debug --no-pub | PASS; APK produced in 23.2 seconds |
+| flutter build apk --debug --no-pub | PASS; APK produced in 6.2 seconds |
 | CLI export twice + cmp against expected evidence | PASS; byte-identical JSONL |
 | CLI input/output alias and malformed input checks | PASS; nonzero exit, no invalid output |
 
@@ -47,7 +54,10 @@ network permission; session-only tool/cache/CA settings follow DEVELOPMENT.md.
 2. Real local-video import/decoder, timestamp/geometry adapter and licensed
    detector integration are absent. Validate these on approved video fixtures
    before claiming real detection or tracking behavior.
-3. Mac/Xcode and reference-device validation remain open. Follow DEVELOPMENT.md
+3. Source-content hashing and evidence-to-source cryptographic binding are
+   deferred. No crypto dependency was added. Declared fixture IDs/metadata and
+   repository validation SHA values do not replace per-artifact content identity.
+4. Mac/Xcode and reference-device validation remain open. Follow DEVELOPMENT.md
    and additionally exercise the labeled offline screen on the simulator.
 
 See M1_OFFLINE_HARNESS.md for policies, schemas, association limitations and

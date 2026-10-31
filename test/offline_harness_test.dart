@@ -33,7 +33,14 @@ Map<String, Object?> frame(
   'selectDetectionId': selection,
 };
 String source(List<Map<String, Object?>> frames) => jsonEncode({
-  'schemaVersion': 1,
+  'schemaVersion': 2,
+  'sourceManifest': {
+    'timestampSource': 'sourcePtsUs',
+    'coordinateSystem': 'normalizedTopLeft',
+    'rotationDegrees': 0,
+    'declaredFrameCount': frames.length,
+    'detectionAdapter': {'type': 'syntheticAnnotations', 'version': '1'},
+  },
   'origin': 'synthetic',
   'fixtureId': 'test',
   'frames': frames,
@@ -45,6 +52,125 @@ List<Map<String, dynamic>> run(List<Map<String, Object?>> frames) =>
         .toList();
 
 void main() {
+  test(
+    'source manifest rejects missing, unsupported or inconsistent metadata',
+    () {
+      Map<String, dynamic> valid() =>
+          jsonDecode(source([frame(0, [])])) as Map<String, dynamic>;
+      final missing = valid()..remove('sourceManifest');
+      expect(
+        () => DetectionFixture.parse(jsonEncode(missing)),
+        throwsFormatException,
+      );
+      final invalid = <String, List<Object?>>{
+        'timestampSource': [null, 'uiClock', 'defaultFps'],
+        'coordinateSystem': [null, 'pixels', 'normalizedBottomLeft'],
+        'rotationDegrees': [null, 90, 0.0, '0'],
+        'declaredFrameCount': [null, 0, 2, 1.0, '1'],
+        'detectionAdapter': [
+          null,
+          {'type': 'realDetector', 'version': '1'},
+          {'type': 'syntheticAnnotations', 'version': '2'},
+          {'type': 'syntheticAnnotations', 'version': 1},
+        ],
+      };
+      for (final field in invalid.entries) {
+        for (final value in field.value) {
+          final root = valid();
+          (root['sourceManifest'] as Map)[field.key] = value;
+          expect(
+            () => DetectionFixture.parse(jsonEncode(root)),
+            throwsFormatException,
+            reason: 'Reject ${field.key}=$value',
+          );
+        }
+        final root = valid();
+        (root['sourceManifest'] as Map).remove(field.key);
+        expect(
+          () => DetectionFixture.parse(jsonEncode(root)),
+          throwsFormatException,
+        );
+      }
+    },
+  );
+  test(
+    'every evidence record carries the complete validated source manifest',
+    () {
+      final fixture = DetectionFixture.parse(
+        source([
+          frame(0, []),
+          frame(13, [detection('a')]),
+        ]),
+      );
+      final lines = const LineSplitter().convert(OfflineHarness().run(fixture));
+      for (final line in lines) {
+        final evidence = jsonDecode(line) as Map;
+        expect(evidence['schemaVersion'], 2);
+        expect(evidence['sourceManifest'], fixture.sourceManifest.toJson());
+      }
+    },
+  );
+  test('all-empty detection frames each produce one evidence record', () {
+    final timestamps = [1, 10, 12, 99];
+    final records = run(timestamps.map((t) => frame(t, [])).toList());
+    expect(records, hasLength(timestamps.length));
+    for (var i = 0; i < records.length; i++) {
+      expect(records[i]['frameIndex'], i);
+      expect(records[i]['inputDetections'], isEmpty);
+      expect(records[i]['state'], 'waiting');
+      expect(records[i]['trackId'], isNull);
+      expect(records[i]['observedDetectionId'], isNull);
+      expect((records[i]['capture'] as Map)['timestampUs'], timestamps[i]);
+    }
+  });
+  test(
+    'variable PTS and long gaps are preserved without FPS or time-based expiry',
+    () {
+      final timestamps = [13, 29, 5000000, 9000000000];
+      final records = run([
+        frame(timestamps[0], [detection('a')]),
+        frame(timestamps[1], [detection('b')]),
+        frame(timestamps[2], []),
+        frame(timestamps[3], [detection('c')]),
+      ]);
+      expect(
+        records.map((r) => (r['capture'] as Map)['timestampUs']),
+        timestamps,
+      );
+      expect(records[2]['missedFrames'], 1);
+      expect(records[3]['state'], 'tracked');
+      expect(records[3]['trackId'], records[0]['trackId']);
+      expect(records[3]['lastObservedTimestampUs'], timestamps[3]);
+      for (final record in records) {
+        expect(jsonEncode(record).toLowerCase(), isNot(contains('fps')));
+        expect(
+          record['limitations'],
+          contains('frameBudgetOnlyNoElapsedTimeTimeout'),
+        );
+      }
+    },
+  );
+  test(
+    'canonical JSONL round-trips with the same meaning and stable encoding',
+    () {
+      final fixture = DetectionFixture.parse(
+        File('assets/fixtures/occlusion.json').readAsStringSync(),
+      );
+      final canonical = OfflineHarness().run(fixture);
+      final decoded = const LineSplitter()
+          .convert(canonical)
+          .map(jsonDecode)
+          .toList();
+      final encoded = '${decoded.map(jsonEncode).join('\n')}\n';
+      final reparsed = const LineSplitter()
+          .convert(encoded)
+          .map(jsonDecode)
+          .toList();
+      expect(reparsed, decoded);
+      expect(encoded, canonical);
+      expect(decoded, hasLength(fixture.sourceManifest.declaredFrameCount));
+    },
+  );
   test('authored fixture is repeatable byte-for-byte and matches reviewed evidence', () {
     final fixture = DetectionFixture.parse(
       File('assets/fixtures/occlusion.json').readAsStringSync(),
@@ -218,7 +344,8 @@ void main() {
       expect(() => DetectionFixture.parse(source([])), throwsFormatException);
       expect(
         () => DetectionFixture.parse(
-          source([frame(0, [])]).replaceFirst('synthetic', 'video'),
+          source([frame(0, [])])
+              .replaceFirst('"origin":"synthetic"', '"origin":"video"'),
         ),
         throwsFormatException,
       );
