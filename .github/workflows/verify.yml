@@ -1,5 +1,5 @@
 name: Mobile verification
-on: [push, pull_request]
+on: [push, pull_request, workflow_dispatch]
 permissions:
   contents: read
 jobs:
@@ -27,6 +27,14 @@ jobs:
       - run: flutter test --no-pub
       - run: python3 tool/check_licenses.py
       - run: flutter build apk --debug --no-pub
+      - name: Keep Android device-test APK
+        uses: actions/upload-artifact@v7.0.2
+        with:
+          name: hiz-olcer-android-debug-${{ github.sha }}
+          path: build/app/outputs/flutter-apk/app-debug.apk
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 0
   ios:
     runs-on: macos-15
     steps:

@@ -1,12 +1,25 @@
 # Project status
 
-Last updated: 2026-11-01
+Last updated: 2026-11-03
 
 ## Current phase
 
 M1 — local-video picker/decoder and detector integration is validated on
-`codex/m1-local-video-decoder`; **M1 is not complete**. Physical Android/iPhone
+`main` at `16e6fb2`; **M1 is not complete**. Physical Android/iPhone
 runtime verification and real-video tracking evidence remain pending.
+
+## Android device-test delivery
+
+- The Android verification job now keeps the generated debug APK as a GitHub
+  Actions artifact for seven days. The artifact name includes the exact commit
+  SHA so a device observation can be tied to its source revision.
+- `workflow_dispatch` permits an authorized repository user to request a fresh
+  package without changing application code.
+- The APK remains an unsigned-for-store debug test package. Successful CI
+  creation and download do not establish picker, decoder, detector, performance,
+  thermal, or measurement behavior on a physical phone.
+- No video, device identifier, credential, signing key, dependency, model, or
+  network service is added by this delivery change.
 
 ## M1 local-video slice
 
