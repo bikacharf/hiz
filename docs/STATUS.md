@@ -48,6 +48,27 @@ real-video target-identity evidence remain pending.
 - The local-video screen labels the output as experimental and continues to
   return no speed. CI and a second physical-device run are required before this
   slice is accepted.
+- Commit `24d757e` was installed on the same Samsung after removing the previous
+  debug build because separate GitHub runners used incompatible ephemeral debug
+  signing keys. The selected video produced detections in all 120 processed
+  frames (145 person and 568 vehicle detection records), but zero tracks and 120
+  ambiguous frames. These are repeated per-frame detections, not object counts.
+  The fail-closed result confirms that box association did not silently choose
+  among multiple candidates; it does not validate target identity.
+
+## Local-video target selection
+
+- When automatic association forms no track and an ambiguous frame is available,
+  the app keeps one decoded RGB preview in process memory, overlays numbered
+  candidate boxes, and asks the user to choose a target explicitly.
+- The chosen observation starts a tracker with automatic reacquisition disabled.
+  Stored typed detections from the remaining analyzed frames are replayed without
+  uploading or decoding the source video again.
+- The preview is disposed after selection or when the page is replaced. No image,
+  URI, filename, or selection is added to history, analytics, network requests,
+  or repository evidence.
+- CI and physical Android verification of the numbered preview and selection
+  interaction are still required. iPhone runtime behavior remains unverified.
 
 ## M1 local-video slice
 

@@ -57,12 +57,13 @@ class VideoTrackSummary {
 /// Conservative single-target spatial association for decoded video frames.
 ///
 /// This tracker has no motion prediction, appearance model, re-identification,
-/// target selection, metric scale, or speed output. Ambiguous matches never win
-/// by score or list order.
+/// metric scale, or speed output. Ambiguous matches never win by score or list
+/// order; an optional explicit user selection may acquire one candidate.
 class ConservativeSingleTargetTracker {
   ConservativeSingleTargetTracker({
     this.minimumIou = .2,
     this.maximumMissedFrames = 2,
+    this.automaticAcquisition = true,
   }) {
     require(
       minimumIou.isFinite &&
@@ -75,6 +76,7 @@ class ConservativeSingleTargetTracker {
 
   final double minimumIou;
   final int maximumMissedFrames;
+  final bool automaticAcquisition;
   final List<VideoTrackSummary> _completed = [];
   final List<DetectionObservation> _observations = [];
 
@@ -90,6 +92,7 @@ class ConservativeSingleTargetTracker {
   VideoTrackUpdate update({
     required CaptureMetadata capture,
     required List<DetectionObservation> detections,
+    DetectionObservation? selectedDetection,
   }) {
     require(!_finished, 'Tracker is already finished');
     for (final detection in detections) {
@@ -98,6 +101,10 @@ class ConservativeSingleTargetTracker {
         'Detection capture metadata must match its frame',
       );
     }
+    require(
+      selectedDetection == null || detections.contains(selectedDetection),
+      'Selected detection must belong to the frame',
+    );
 
     String? endedTrackId;
     DetectionObservation? observed;
@@ -112,8 +119,13 @@ class ConservativeSingleTargetTracker {
     if (geometryChanged) {
       endedTrackId = _end(VideoTrackState.captureGeometryChanged);
       state = VideoTrackState.captureGeometryChanged;
+    } else if (selectedDetection != null) {
+      endedTrackId = _end(VideoTrackState.classChanged);
+      _trackId = 'video-track-${++_serial}';
+      observed = selectedDetection;
+      state = VideoTrackState.acquired;
     } else if (_trackId == null) {
-      if (detections.length == 1) {
+      if (automaticAcquisition && detections.length == 1) {
         observed = detections.single;
         _trackId = 'video-track-${++_serial}';
         state = VideoTrackState.acquired;

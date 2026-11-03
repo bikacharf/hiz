@@ -47,6 +47,23 @@ void main() {
     expect(result.endedTrackId, isNotNull);
   });
 
+  test('explicit selection acquires one candidate without score ordering', () {
+    final tracker = ConservativeSingleTargetTracker(
+      automaticAcquisition: false,
+    );
+    final first = _detection(0, x: .1);
+    final selected = _detection(0, x: .6, kind: TargetClass.vehicle);
+    final result = tracker.update(
+      capture: first.capture,
+      detections: [first, selected],
+      selectedDetection: selected,
+    );
+
+    expect(result.state, VideoTrackState.acquired);
+    expect(result.observed, same(selected));
+    expect(tracker.finish().single.targetClass, TargetClass.vehicle);
+  });
+
   test('class and capture geometry changes end identity', () {
     for (final changed in [
       _detection(1, kind: TargetClass.bicycle),

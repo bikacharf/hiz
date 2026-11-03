@@ -62,6 +62,31 @@ void main() {
       expect(summary.ambiguousFrames, 0);
     },
   );
+
+  test(
+    'ambiguous video requests a target and replays stored observations',
+    () async {
+      final session = _FakeSession([_frame(1000), _frame(2000), _frame(3000)]);
+      final runtime = _FakeRuntime([_rawMany(), _rawMany(), _rawMany()]);
+      final initial = await LocalVideoAnalyzer(
+        runtimeFactory: () async => runtime,
+      ).analyze(session);
+
+      expect(initial.tracks, isEmpty);
+      expect(initial.ambiguousFrames, 3);
+      expect(initial.selectionPrompt?.candidates, hasLength(2));
+      expect(initial.selectionPrompt?.rgb.length, 12);
+
+      final selected = initial.selectCandidate(1);
+      expect(selected.selectionPrompt, isNull);
+      expect(selected.tracks, hasLength(1));
+      expect(selected.longestTrack?.targetClass, TargetClass.vehicle);
+      expect(selected.longestTrack?.observedFrames, 3);
+      expect(selected.framesWithTrackObservation, 3);
+      expect(selected.ambiguousFrames, 0);
+      expect(() => selected.selectCandidate(0), throwsStateError);
+    },
+  );
 }
 
 DecodedRgbFrame _frame(int timestampUs) => DecodedRgbFrame(
@@ -88,6 +113,27 @@ EfficientDetRawOutput _raw({required double classIndex}) {
     classes: classes,
     scores: scores,
     count: 1,
+  );
+}
+
+EfficientDetRawOutput _rawMany() {
+  final boxes = List.generate(
+    25,
+    (_) => <double>[.1, .1, .3, .3],
+    growable: false,
+  );
+  boxes[1] = [.6, .6, .9, .9];
+  final classes = List<double>.filled(25, 0)
+    ..[0] = 0
+    ..[1] = 2;
+  final scores = List<double>.filled(25, 0)
+    ..[0] = .8
+    ..[1] = .9;
+  return EfficientDetRawOutput(
+    boxes: boxes,
+    classes: classes,
+    scores: scores,
+    count: 2,
   );
 }
 
