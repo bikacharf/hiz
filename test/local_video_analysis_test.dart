@@ -76,6 +76,27 @@ void main() {
       expect(initial.ambiguousFrames, 3);
       expect(initial.selectionPrompt?.candidates, hasLength(2));
       expect(initial.selectionPrompt?.rgb.length, 12);
+      expect(
+        initial.selectionPrompt?.candidateIndexesAt(
+          normalizedX: .2,
+          normalizedY: .2,
+        ),
+        [0],
+      );
+      expect(
+        initial.selectionPrompt?.candidateIndexesAt(
+          normalizedX: .75,
+          normalizedY: .75,
+        ),
+        [1],
+      );
+      expect(
+        initial.selectionPrompt?.candidateIndexesAt(
+          normalizedX: .5,
+          normalizedY: .5,
+        ),
+        isEmpty,
+      );
 
       final selected = initial.selectCandidate(1);
       expect(selected.selectionPrompt, isNull);

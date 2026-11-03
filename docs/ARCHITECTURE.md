@@ -116,7 +116,10 @@ scale or speed output. The visible page labels these limits. Local video content
 and URI values are not added to evidence, history, analytics or network requests.
 When every processed frame is ambiguous and no track is formed, the first
 ambiguous decoded RGB frame is retained only in process memory with its numbered
-detection boxes. The user explicitly selects one candidate; the tracker then
+detection boxes. The user explicitly selects one candidate by tapping its box or
+its numbered fallback button. A tap intersecting multiple boxes opens an explicit
+candidate list rather than resolving by score, size, or observation order. A tap
+outside every box changes no state. The tracker then
 replays the already stored typed detection observations from that frame onward
 with automatic reacquisition disabled. The video is not uploaded or decoded a
 second time. Source-content hashing, stronger real-video tracking and

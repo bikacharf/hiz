@@ -67,6 +67,9 @@ real-video target-identity evidence remain pending.
 - The preview is disposed after selection or when the page is replaced. No image,
   URI, filename, or selection is added to history, analytics, network requests,
   or repository evidence.
+- Candidate boxes are directly tappable. Empty-space taps show a corrective
+  message; overlapping boxes open a numbered candidate list and never resolve by
+  score or list order. Numbered buttons remain as an accessible fallback.
 - CI and physical Android verification of the numbered preview and selection
   interaction are still required. iPhone runtime behavior remains unverified.
 

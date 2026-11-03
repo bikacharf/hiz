@@ -78,6 +78,52 @@ class _LocalVideoPageState extends State<LocalVideoPage> {
     });
   }
 
+  Future<void> selectCandidateAt(
+    LocalVideoSelectionPrompt prompt,
+    Offset position,
+    Size previewSize,
+  ) async {
+    final matches = prompt.candidateIndexesAt(
+      normalizedX: position.dx / previewSize.width,
+      normalizedY: position.dy / previewSize.height,
+    );
+    if (matches.isEmpty) {
+      if (!mounted) return;
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(content: Text('Seçmek için bir kutunun içine dokun.')),
+      );
+      return;
+    }
+    if (matches.length == 1) {
+      selectCandidate(matches.single);
+      return;
+    }
+    final selected = await showModalBottomSheet<int>(
+      context: context,
+      builder: (context) => SafeArea(
+        child: ListView(
+          shrinkWrap: true,
+          children: [
+            const ListTile(
+              title: Text('Üst üste gelen nesneler'),
+              subtitle: Text('Takip etmek istediğin nesneyi seç.'),
+            ),
+            for (final index in matches)
+              ListTile(
+                leading: CircleAvatar(child: Text('${index + 1}')),
+                title: Text(
+                  '${_targetLabel(prompt.candidates[index].target.kind)} '
+                  '%${(prompt.candidates[index].score * 100).round()}',
+                ),
+                onTap: () => Navigator.pop(context, index),
+              ),
+          ],
+        ),
+      ),
+    );
+    if (selected != null && mounted) selectCandidate(selected);
+  }
+
   @override
   void dispose() {
     selectionImage?.dispose();
@@ -127,20 +173,38 @@ class _LocalVideoPageState extends State<LocalVideoPage> {
             ),
             const SizedBox(height: 8),
             const Text(
-              'Kutunun numarasına dokun. Önizleme yalnızca cihaz belleğinde tutulur.',
+              'Görüntüde takip etmek istediğin kutuya dokun. Alttaki numaralı düğmeleri de kullanabilirsin. Önizleme yalnızca cihaz belleğinde tutulur.',
             ),
             const SizedBox(height: 12),
             if (selectionImage case final image?)
               AspectRatio(
                 aspectRatio: prompt.capture.width / prompt.capture.height,
-                child: Stack(
-                  fit: StackFit.expand,
-                  children: [
-                    RawImage(image: image, fit: BoxFit.fill),
-                    CustomPaint(
-                      painter: _CandidateBoxPainter(prompt.candidates),
-                    ),
-                  ],
+                child: LayoutBuilder(
+                  builder: (context, constraints) {
+                    final previewSize = Size(
+                      constraints.maxWidth,
+                      constraints.maxHeight,
+                    );
+                    return GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTapUp: (details) => selectCandidateAt(
+                        prompt,
+                        details.localPosition,
+                        previewSize,
+                      ),
+                      child: Stack(
+                        fit: StackFit.expand,
+                        children: [
+                          RawImage(image: image, fit: BoxFit.fill),
+                          IgnorePointer(
+                            child: CustomPaint(
+                              painter: _CandidateBoxPainter(prompt.candidates),
+                            ),
+                          ),
+                        ],
+                      ),
+                    );
+                  },
                 ),
               ),
             const SizedBox(height: 12),

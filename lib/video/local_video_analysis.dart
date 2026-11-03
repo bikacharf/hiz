@@ -98,6 +98,32 @@ class LocalVideoSelectionPrompt {
   final CaptureMetadata capture;
   final Uint8List rgb;
   final List<DetectionObservation> candidates;
+
+  List<int> candidateIndexesAt({
+    required double normalizedX,
+    required double normalizedY,
+  }) {
+    require(
+      normalizedX.isFinite &&
+          normalizedY.isFinite &&
+          normalizedX >= 0 &&
+          normalizedX <= 1 &&
+          normalizedY >= 0 &&
+          normalizedY <= 1,
+      'Tap must be inside the preview',
+    );
+    final matches = <int>[];
+    for (var index = 0; index < candidates.length; index++) {
+      final box = candidates[index].box;
+      if (normalizedX >= box.x &&
+          normalizedX <= box.x + box.width &&
+          normalizedY >= box.y &&
+          normalizedY <= box.y + box.height) {
+        matches.add(index);
+      }
+    }
+    return List.unmodifiable(matches);
+  }
 }
 
 class _AnalyzedVideoFrame {
