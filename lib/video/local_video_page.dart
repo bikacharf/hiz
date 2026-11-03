@@ -68,7 +68,7 @@ class _LocalVideoPageState extends State<LocalVideoPage> {
         ),
         const SizedBox(height: 8),
         const Text(
-          'Bu ekran takip veya hız ölçmez. Sayısal hız göstermez ve algılama sayısı doğruluk anlamına gelmez.',
+          'Bu ekran basit deneysel takip yapar; takip kimlikleri henüz gerçek nesne doğruluğu bakımından doğrulanmadı. Sayısal hız göstermez.',
         ),
         const SizedBox(height: 24),
         FilledButton(
@@ -91,6 +91,18 @@ class _LocalVideoPageState extends State<LocalVideoPage> {
           for (final target in TargetClass.values)
             Text('${_label(target)}: ${result.detectionCounts[target] ?? 0}'),
           const SizedBox(height: 16),
+          Text('Oluşturulan deneysel takip: ${result.tracks.length}'),
+          Text('Takip edilen kare: ${result.framesWithTrackObservation}'),
+          Text('Belirsiz eşleşme karesi: ${result.ambiguousFrames}'),
+          if (result.longestTrack case final track?)
+            Text(
+              'En uzun takip: ${_targetLabel(track.targetClass)}, '
+              '${track.observedFrames} algılanan kare',
+            ),
+          const Text(
+            'Takip sınırı: yalnızca kutu örtüşmesi; hareket tahmini ve yeniden tanıma yok.',
+          ),
+          const SizedBox(height: 16),
           const Text('Hız sonucu: kullanılamıyor'),
         ],
       ],
@@ -103,4 +115,11 @@ String _label(TargetClass target) => switch (target) {
   TargetClass.bicycle => 'Bisiklet algılaması',
   TargetClass.vehicle => 'Araç algılaması',
   TargetClass.ball => 'Top algılaması',
+};
+
+String _targetLabel(TargetClass target) => switch (target) {
+  TargetClass.person => 'insan',
+  TargetClass.bicycle => 'bisiklet',
+  TargetClass.vehicle => 'araç',
+  TargetClass.ball => 'top',
 };

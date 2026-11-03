@@ -21,6 +21,11 @@ void main() {
       expect(summary.framesWithDetections, 2);
       expect(summary.detectionCounts[TargetClass.person], 1);
       expect(summary.detectionCounts[TargetClass.bicycle], 1);
+      expect(summary.framesWithTrackObservation, 1);
+      expect(summary.ambiguousFrames, 0);
+      expect(summary.tracks, hasLength(1));
+      expect(summary.longestTrack?.targetClass, TargetClass.person);
+      expect(summary.longestTrack?.observedFrames, 1);
       expect(summary.truncated, isFalse);
       expect(runtime.closed, isTrue);
       expect(session.closed, isTrue);
@@ -35,6 +40,28 @@ void main() {
     expect(runtime.closed, isTrue);
     expect(session.closed, isTrue);
   });
+
+  test(
+    'analyzer associates repeated detections into one experimental track',
+    () async {
+      final session = _FakeSession([_frame(1000), _frame(2000), _frame(3000)]);
+      final runtime = _FakeRuntime([
+        _raw(classIndex: 2),
+        _raw(classIndex: 2),
+        _raw(classIndex: 2),
+      ]);
+      final summary = await LocalVideoAnalyzer(
+        runtimeFactory: () async => runtime,
+      ).analyze(session);
+
+      expect(summary.tracks, hasLength(1));
+      expect(summary.longestTrack?.targetClass, TargetClass.vehicle);
+      expect(summary.longestTrack?.observedFrames, 3);
+      expect(summary.longestTrack?.observedDurationUs, 2000);
+      expect(summary.framesWithTrackObservation, 3);
+      expect(summary.ambiguousFrames, 0);
+    },
+  );
 }
 
 DecodedRgbFrame _frame(int timestampUs) => DecodedRgbFrame(

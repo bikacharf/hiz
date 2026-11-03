@@ -107,8 +107,12 @@ files and decoder failures stop the analysis instead of falling back to mock
 frames or assumed FPS.
 
 `lib/video/local_video_analysis.dart` runs at most 120 decoded frames through the
-reviewed EfficientDet adapter and returns only coarse per-class detection counts.
-The visible page labels the limit and explicitly reports that tracking and speed
-are unavailable. Local video contents and URI values are not added to evidence,
-history, analytics or network requests. Source-content hashing, real-video track
-association and approved-fixture evidence remain separate follow-up work.
+reviewed EfficientDet adapter and returns coarse per-class detection counts plus
+an explicitly experimental single-target association summary. The association
+uses only same-class normalized-box IoU, never selects between ambiguous matches,
+permits two missed frames, and resets after capture-geometry changes. It has no
+motion prediction, appearance model, re-identification, target selection, metric
+scale or speed output. The visible page labels these limits. Local video contents
+and URI values are not added to evidence, history, analytics or network requests.
+Source-content hashing, user target selection, stronger real-video tracking and
+approved-fixture evidence remain separate follow-up work.

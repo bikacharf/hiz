@@ -5,8 +5,9 @@ Last updated: 2026-11-03
 ## Current phase
 
 M1 — local-video picker/decoder and detector integration is validated on
-`main` at `16e6fb2`; **M1 is not complete**. Physical Android/iPhone
-runtime verification and real-video tracking evidence remain pending.
+`main` at `69413cd`; **M1 is not complete**. One physical Android local-video
+run completed; repeated Android coverage, iPhone runtime verification, and
+real-video target-identity evidence remain pending.
 
 ## Android device-test delivery
 
@@ -20,6 +21,33 @@ runtime verification and real-video tracking evidence remain pending.
   thermal, or measurement behavior on a physical phone.
 - No video, device identifier, credential, signing key, dependency, model, or
   network service is added by this delivery change.
+
+## Physical Android local-video evidence
+
+- Commit `69413cd` was installed over ADB on a Samsung SM-S721B running Android
+  15 (API 35, arm64-v8a). The app launched and the system document picker
+  returned an explicitly user-selected local MP4 to the app.
+- The native decoder and bundled detector processed the 120-frame prototype
+  limit without a fatal Android/Flutter log entry. Two frames contained a coarse
+  vehicle detection. This means two detection-bearing frames, not two distinct
+  vehicles and not a validated detector accuracy result.
+- No copy of the selected video was pulled from the phone or committed. One
+  temporary screenshot that exposed the notification shade was immediately
+  deleted; retained screenshots show only application UI and coarse results.
+- This is one device and one user-selected video. Portrait/landscape coverage,
+  more codecs, longer clips, repeated runs, latency, memory, thermal behavior,
+  target identity and ground truth remain unverified.
+
+## Experimental real-video association
+
+- `lib/tracking/single_target_iou_tracker.dart` connects decoded model
+  observations with a conservative single-target box-overlap policy.
+- It refuses ambiguous matches, preserves at most two missed frames, ends a
+  track on class/capture-geometry changes, and reports observed-frame counts and
+  source-PTS duration. It does not predict motion or re-identify a lost target.
+- The local-video screen labels the output as experimental and continues to
+  return no speed. CI and a second physical-device run are required before this
+  slice is accepted.
 
 ## M1 local-video slice
 
